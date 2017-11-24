@@ -1,17 +1,20 @@
 {
     "name": "ostheneo/toaster",
     "description": "easy start for new projects",
+    "type": "package",
     "authors": [
         {
             "name": "Harry Gutierrez",
             "email": "harrygutierrezm@gmail.com"
         }
     ],
-    "minimum-stability": "dev",
     "require": {
 
     },
     "files": [
-        "Helpers/BladeEngine.php" 
-    ]
+        "Helpers/BladeEngine.php"
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true
+
 }

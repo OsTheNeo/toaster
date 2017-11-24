@@ -16,6 +16,7 @@ class ToasterController extends Controller
     protected $init;
     protected $NameDataViews;
     protected $options;
+    protected $admin; // define si se usa el admin por defecto o uno custom
 
     public function index()
     {
