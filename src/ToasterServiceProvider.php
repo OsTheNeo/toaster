@@ -14,6 +14,9 @@ class ToasterServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->loadViewsFrom(__DIR__.'/Views', 'Toaster');
+        $this->publishes([
+            __DIR__.'/path/to/assets' => public_path('packages/ostheneo/toaster/Vendor'),
+        ], 'public');
     }
 
     /**

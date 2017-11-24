@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class ToasterController extends Controller
 {
@@ -107,6 +108,120 @@ class ToasterController extends Controller
                 "data"            => $query->get()];
 
 
+    }
+
+    function create()
+    {
+        $models = [];
+
+        foreach ($this->options['models'] as $model) {
+            $nameModel = explode(rtrim('\ '), $model);
+            $models[end($nameModel)] = new $model;
+        }
+
+        $this->options['models'] = $models;
+        $this->options['access'] = 'create';
+
+        return view('Toaster::Content', $this->options);
+    }
+
+    public function store(Request $request)
+    {
+        $model = $this->Model;
+
+        if (isset($this->options->forms)) {
+            foreach ($this->options->forms as $form) {
+                $model = $this->populate($model, $form);
+            }
+        } else {
+
+        }
+
+        $model->save();
+
+        if (isset($this->options->redirect)) {
+
+            if ($this->options->redirect == 'edit') {
+                Session::flash('message', 'Fue una creacion exitosa. que sigue? <br>' . $this->options($model, $this->options->sucessOptions));
+                return redirect(route($this->options->routeRedirect, $model->id));
+            }
+            return redirect($this->options->redirect);
+        } else {
+            return redirect()->back();
+        }
+
+
+    }
+
+    public function update(Request $request, $id){
+        $model = $this->Model;
+
+        if (isset($this->options->forms)) {
+            foreach ($this->options->forms as $form) {
+                $model = $this->populate($model, $form);
+            }
+        } else {
+
+        }
+
+        $model->save();
+
+        if (isset($this->options->redirect)) {
+
+            if ($this->options->redirect == 'edit') {
+                Session::flash('message', 'Fue una actualizacion exitosa. que sigue? <br>' . $this->options($model, $this->options->sucessOptions));
+                return redirect(route($this->options->routeRedirect, $model->id));
+            }
+            return redirect($this->options->redirect);
+        } else {
+            return redirect()->back();
+        }
+    }
+
+    public function edit($id){
+        $models = [];
+
+        foreach ($this->options['models'] as $model) {
+            $nameModel = explode(rtrim('\ '), $model);
+            $models[end($nameModel)] = new $model;
+        }
+
+        $this->options['model'] = $this->Model;
+        $this->options['models'] = $models;
+        $this->options['access'] = 'edit';
+        return view('Toaster::Content', $this->options);
+    }
+
+    function populate($model, $form)
+    {
+        unset($form['_method']);
+        foreach ($form as $field => $value) {
+            $model->$field = $value;
+        }
+        return $model;
+    }
+
+    function options($model, $options)
+    {
+        $html = '';
+        foreach ($options as $name => $options) {
+            if (isset($options['required'])) {
+                $parameters = [];
+                if (is_array($options['required'])) {
+                    foreach ($options['required'] as $field) {
+                        array_push($parameters, $model->field);
+                    }
+                } else {
+                    array_push($parameters, $model->$options['required']);
+                }
+                $html .= '<a href="' . route($options['route'], $parameters) . '">' . $name . '</a>';
+            } else {
+                $html .= '<a href="' . route($options['route']) . '">' . $name . '</a>';
+            }
+
+        }
+
+        return $html;
     }
 
 
