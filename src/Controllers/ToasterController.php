@@ -20,6 +20,8 @@ class ToasterController extends Controller
 
     public function index()
     {
+        if(isset($this->admin))
+            $this->options->extend = $this->admin;
         return view('Toaster::Content', $this->options);
     }
 
