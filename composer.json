@@ -12,6 +12,6 @@
 
     },
     "files": [
-        "Helpers/BladeEngine.php" // <---- ADD THIS
+        "Helpers/BladeEngine.php" 
     ]
 }

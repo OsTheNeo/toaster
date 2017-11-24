@@ -70,7 +70,7 @@
                                                 "url": "https://cdn.datatables.net/plug-ins/1.10.12/i18n/Spanish.json"
                                             },
                                             "ajax": $.fn.dataTable.pipeline({
-                                                url: '{{ URL::to('server_processing/'.$content->alias) }}',
+                                                url: '{{ route('server.pipeline', $content->alias) }}',
                                                 pages: 5
                                             })
                                         });

@@ -224,5 +224,9 @@ class ToasterController extends Controller
         return $html;
     }
 
+    public function Datatable($alias){
+
+        dd($_GET, $alias);
+    }
 
 }
