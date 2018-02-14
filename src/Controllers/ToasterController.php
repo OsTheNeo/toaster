@@ -7,9 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Ostheneo\Store\StoreOnline;
 
-class ToasterController extends Controller
-{
+class ToasterController extends Controller {
     protected $Repository;
     protected $Model;
     protected $message;
@@ -18,20 +18,17 @@ class ToasterController extends Controller
     protected $options;
     protected $admin; // define si se usa el admin por defecto o uno custom
 
-    public function index()
-    {
-        if(isset($this->admin))
+    public function index() {
+        if (isset($this->admin))
             $this->options->extend = $this->admin;
         return view('Toaster::Content', $this->options);
     }
 
-    public function DataAsJson()
-    {
+    public function DataAsJson() {
 
     }
 
-    function buildLinks($links, $model)
-    {
+    function buildLinks($links, $model) {
         $data = null;
         foreach ($links as $link) {
             $available = true;
@@ -67,18 +64,24 @@ class ToasterController extends Controller
         return $data;
     }
 
-    function askToDatabase(Request $request)
-    {
+    function askToDatabase(Request $request, $alias) {
         $data = $request->all();
-        $howShowData = $data['alias'];
+        $model = StoreOnline::alias($alias);
+        $model = new $model;
 
-        $settings = $this->NameDataViews[$howShowData];
-        $query = DB::table($settings->nameTable);
-        $columns = $settings['columns'];
+        $howShowData = $model->schemas[$alias];
+        $nameTable =  $model->table;
+        if(isset($howShowData->parameters->customTable)){
+            $nameTable = $howShowData->parameters->customTable;
+        }
+
+        $query = DB::table($nameTable);
+
+        $columns = $howShowData;
 
         $recordsTotal = $query->count();
 
-        if ($data['search']) {
+        if ($data['search']['value'] != null) {
             $search = $data['search']['value'];
             $query->where(function ($query) use ($columns, $request, $search) {
                 $firstWhere = true;
@@ -96,12 +99,6 @@ class ToasterController extends Controller
 
         $recordsFiltered = $query->count();
 
-
-        if ($data['order']) {
-            $order = $data['order'];
-            $query->orderBy($order['column'], $order['dir']);
-        }
-
         $query->take($request['length']);
         $query->skip($request['start']);
 
@@ -113,8 +110,7 @@ class ToasterController extends Controller
 
     }
 
-    function create()
-    {
+    function create() {
         $models = [];
 
         foreach ($this->options['models'] as $model) {
@@ -128,8 +124,7 @@ class ToasterController extends Controller
         return view('Toaster::Content', $this->options);
     }
 
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         $model = $this->Model;
 
         if (isset($this->options->forms)) {
@@ -156,7 +151,7 @@ class ToasterController extends Controller
 
     }
 
-    public function update(Request $request, $id){
+    public function update(Request $request, $id) {
         $model = $this->Model;
 
         if (isset($this->options->forms)) {
@@ -181,7 +176,7 @@ class ToasterController extends Controller
         }
     }
 
-    public function edit($id){
+    public function edit($id) {
         $models = [];
 
         foreach ($this->options['models'] as $model) {
@@ -195,8 +190,7 @@ class ToasterController extends Controller
         return view('Toaster::Content', $this->options);
     }
 
-    function populate($model, $form)
-    {
+    function populate($model, $form) {
         unset($form['_method']);
         foreach ($form as $field => $value) {
             $model->$field = $value;
@@ -204,8 +198,7 @@ class ToasterController extends Controller
         return $model;
     }
 
-    function options($model, $options)
-    {
+    function options($model, $options) {
         $html = '';
         foreach ($options as $name => $options) {
             if (isset($options['required'])) {
@@ -227,7 +220,7 @@ class ToasterController extends Controller
         return $html;
     }
 
-    public function Datatable($alias){
+    public function Datatable($alias) {
 
         dd($_GET, $alias);
     }

@@ -1,20 +1,36 @@
 {
     "name": "ostheneo/toaster",
     "description": "easy start for new projects",
-    "type": "package",
+    "license": "MIT",
+    "type": "libray",
     "authors": [
-        {
-            "name": "Harry Gutierrez",
-            "email": "harrygutierrezm@gmail.com"
-        }
     ],
-    "require": {
-
-    },
     "files": [
         "Helpers/BladeEngine.php"
     ],
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    "minimum-stability": "stable",
+    "require": {
+        "php" : "^7.0",
+        "illuminate/support": "~5.6.3"
+    },
+    "require-dev": {
+    },
+    "autoload": {
+        "psr-4": {
+            "OsTheNeo\\Toaster\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "OsTheNeo\\Toaster\\Test\\": "tests"
+        }
+    },
+    "extra": {
+    "laravel": {
+        "providers": [
+            "OsTheNeo\\Toaster\\ToasterServiceProvider"
+        ]
+    }
+}
 
 }

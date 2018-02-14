@@ -6,15 +6,20 @@ use Illuminate\Support\ServiceProvider;
 
 class ToasterServiceProvider extends ServiceProvider {
     /**
+     * Indicates if loading of the provider is deferred.
+     *
+     * @var bool
+     */
+    protected $defer = false;
+
+    /**
      * Bootstrap the application services.
      *
      * @return void
      */
     public function boot() {
-        $this->loadViewsFrom(__DIR__ . '/Views', 'Toaster');
-        $this->publishes([
-            __DIR__ . '/path/to/assets' => public_path('packages/ostheneo/toaster/Vendor'),
-        ], 'public');
+        $this->loadRoutesFrom(__DIR__ . '/routes/web.php');
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations/');
     }
 
     /**
@@ -23,7 +28,6 @@ class ToasterServiceProvider extends ServiceProvider {
      * @return void
      */
     public function register() {
-        include __DIR__ . '/Routes.php';
-        $this->app->make('Ostheneo\Toaster\Controllers\ToasterController');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'test');
     }
 }
