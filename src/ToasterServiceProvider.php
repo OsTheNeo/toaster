@@ -1,6 +1,6 @@
 <?php
 
-namespace Ostheneo\Toaster;
+namespace OsTheNeo\Toaster;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -13,7 +13,7 @@ class ToasterServiceProvider extends ServiceProvider {
     protected $defer = false;
 
     /**
-     * Bootstrap the application services.
+     * Bootstrap the application events.
      *
      * @return void
      */
@@ -22,12 +22,13 @@ class ToasterServiceProvider extends ServiceProvider {
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations/');
     }
 
+
     /**
-     * Register the application services.
+     * Register the service provider.
      *
      * @return void
      */
     public function register() {
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'test');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'Toaster');
     }
 }

@@ -6,9 +6,10 @@
  * Time: 3:29 PM
  */
 
-namespace Ostheneo\Toaster;
+namespace OsTheNeo\Toaster;
 
 
+use App\Dictionary;
 use Illuminate\Support\Facades\DB;
 use Collective\Html\FormFacade as Form;
 
@@ -46,13 +47,14 @@ class BladeEngine {
 
     public static function table($content) {
 
-        $table = '<table class="table" id="' . $content->alias . '">';
+        $table = '<table class="table" style="width:100%" id="' . $content->schema . '">';
         $columnDates = ['created_at', 'updated_at', 'deleted_at'];
         $header = '';
         $content = (object)$content;
 
         if (isset($content->model)) {
-            $model = new $content->model;
+
+            $model = $content->model;
 
             if (isset($content->schema)) {
                 $columns = $model->schemas[$content->schema];
@@ -118,10 +120,12 @@ class BladeEngine {
                 $field = (object)$field;
                 $field->field = $key;
                 $kindInput = $field->kind;
+                if (isset($field->group)) {
+                    $parameters->group = $field->group;
+                }
+
             }
-
             array_push($construction, self::buildHtmlField($field, $kindInput, $parameters));
-
         }
 
         return $construction;
@@ -180,6 +184,14 @@ class BladeEngine {
 
             case 'select':
                 $construct->field = Form::text($field, null, ['class' => "form-control"]);
+
+                if (isset($parameters->group)) {
+                    $data = Dictionary::groupDefinitions($parameters->group);
+                } else {
+
+                }
+
+                $construct->field = Form::select($field, $data, null, ['class' => 'form-control']);
                 return $construct;
                 break;
 
@@ -206,7 +218,12 @@ class BladeEngine {
 
     static function Translate($ask) {
         $dictionary = (object)[
-            'name' => 'Nombre', 'category' => 'Categorias', 'vendor' => 'Proveedor', 'brief' => 'Descripcion corta', 'description' => 'Descripcion', 'variant details' => 'Detalles'
+            'name'            => 'Nombre',
+            'category'        => 'Categorias',
+            'vendor'          => 'Proveedor',
+            'brief'           => 'Descripcion corta',
+            'description'     => 'Descripcion',
+            'variant details' => 'Detalles'
         ];
 
 
@@ -255,13 +272,12 @@ class BladeEngine {
     }
 
 
-    static function makeTextField() {
+    public static function makeTextField() {
 
     }
 
 
-    public
-    static function buildButtons($content) {
+    public static function buildButtons($content) {
         $html = [];
         if (isset($content->buttons)) {
             foreach ($content->buttons as $position => $parameters) {
@@ -269,9 +285,12 @@ class BladeEngine {
                 $parameters = (object)$parameters;
 
                 if ($parameters->kind == 'link') {
-                    $button = "<a href='" . route($parameters->route) . "'>$parameters->text</a>";
+                    if (isset($parameters->parameters)) {
+                        $button = "<a href='" . route($parameters->route, $parameters->parameters) . "'>$parameters->text</a>";
+                    } else {
+                        $button = "<a href='" . route($parameters->route) . "'>$parameters->text</a>";
+                    }
                 }
-
 
                 if ($parameters->kind == 'action') {
                     $button = "<a onclick='$parameters->function'>$parameters->text</a>";
@@ -288,6 +307,32 @@ class BladeEngine {
 
 
         return $html;
+    }
+
+    public static function buildLinks($model, $alias, $row) {
+        $links = "";
+        foreach ($model->links[$alias] as $link) {
+            if (sizeof($link) == 3) {
+                $parameters = [];
+                foreach (collect($link[2]) as $parameter) {
+                    if ($parameter[0] == '_') {
+                        $parameters[] = substr($parameter, 1);
+                    } else {
+                        array_push($parameters, $row->$parameter);
+                    }
+                }
+
+                $links .= "<a class='button' href='" . route($link[1], $parameters) . "'>" . $link[0] . "</a>";
+            } else {
+                $links .= "<a class='button' href='route($link[1])'>$link[0]</a>";
+            }
+
+        }
+        return $links;
+    }
+
+    public static function buildGallery() {
+
     }
 
 
