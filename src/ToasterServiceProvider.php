@@ -28,7 +28,7 @@ class ToasterServiceProvider extends ServiceProvider {
      *
      * @return void
      */
-    public function register() {/***/
+    public function register() {
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'Toaster');
     }
 }

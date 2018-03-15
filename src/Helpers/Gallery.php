@@ -8,15 +8,23 @@
 
 namespace OsTheNeo\Toaster;
 
+use OsTheNeo\Toaster\Models\Gallery as GalleryModel;
+
 class Gallery {
     public static function icon($model, $id) {
-
-        $bin = [$model => "$id"];
-        $gallery = \App\Models\Store\Gallery::where('binded', json_encode($bin))->first();
+        $folder = 'public/files/';
+        $gallery = GalleryModel::where('binded', $model . '-' . $id)->first();
         if ($gallery) {
-            $path = explode(' ', $gallery->created_at);
-            $path = explode('-', $path[0]);
-            return ($path[0] . '/' . $path[1] . '/' . $gallery->icon);
+            $images = json_decode($gallery->images, true);
+            if (sizeof($images) > 0) {
+                $path = explode(' ', $gallery->created_at);
+                $path = explode('-', $path[0]);
+                return ($folder.$path[0] . '/' . $path[1] . '/' . $images[0]);
+            } else {
+                return $folder.'no-thumbnail.png';
+            }
+        } else {
+            return $folder.'no-thumbnail.png';
         }
 
     }

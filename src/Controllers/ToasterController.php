@@ -328,6 +328,7 @@ class ToasterController extends Controller {
         $image = $image[0];
 
         $gallery = Gallery::where('binded', $input['binded'])->first();
+
         if ($gallery == null) {
             $gallery = new Gallery();
             $gallery->images = json_encode([], true);
@@ -346,8 +347,6 @@ class ToasterController extends Controller {
         } else {
             return false;
         }
-
-
     }
 
     public function gallerySort(Request $request) {

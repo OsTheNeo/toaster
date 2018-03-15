@@ -8,23 +8,20 @@
     var urlForRemove = "{!! route('gallery.remove') !!}";
     var urlForSort = "{!! route('gallery.sort') !!}";
     var urlForEditor = "{!! route('gallery.edit') !!}";
-    var binded = "{!! $gallery.'-'.$id !!}"
     var loadedFiles = {};
-
+    var binded = "{!! $gallery.'-'.$id !!}";
+    var token = '{{ csrf_token() }}';
     $.ajax({
-        url : "{!! route('gallery.request', [$gallery.'-'.$id]) !!}",
-        type : "get",
+        url: "{!! route('gallery.request', [$gallery.'-'.$id]) !!}",
+        type: "get",
         async: false,
-        success : function(data) {
+        success: function (data) {
             loadedFiles = JSON.parse(data);
         },
-        error: function() {
+        error: function () {
             loadedFiles = {};
         }
     });
-
-
-
 </script>
 <script src="{{ asset('public/uploader/custom.js') }}" type="text/javascript"></script>
 
