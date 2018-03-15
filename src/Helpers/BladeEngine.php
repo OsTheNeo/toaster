@@ -125,7 +125,7 @@ class BladeEngine {
                 }
 
             }
-            array_push($construction, self::buildHtmlField($field, $kindInput, $parameters));
+            array_push($construction, self::buildHtmlField($field, $kindInput, $parameters,$model));
         }
 
         return $construction;
@@ -133,7 +133,7 @@ class BladeEngine {
 
     }
 
-    static function buildHtmlField($field, $kindInput, $parameters) {
+    static function buildHtmlField($field, $kindInput, $parameters,$model) {
         /* para los que son fechas usa el mismo pero asignando diferentes clases para restringir el tipo de input*/
         if ($kindInput == 'date' or $kindInput == 'datetime' or $kindInput == 'time' or $kindInput == 'year') {
             $class = $kindInput;
@@ -196,6 +196,8 @@ class BladeEngine {
                 break;
 
             case 'checkbox':
+                $construct->field = self::makeCheckbox($field,$parameters->group,$model);
+                return $construct;
                 break;
 
             case 'tags':
@@ -276,6 +278,69 @@ class BladeEngine {
 
     }
 
+    /**
+     * crea los campos checkbox y los carga en el formulario
+     * @param string $construct
+     */
+    public static function makeCheckbox($field, $group,$model)
+    {
+        $data=[];
+        if($model->suggested_products!=null){
+            $data=explode(',',$model->suggested_products);
+        }
+        $checks = "";
+        $options = self::makeOptions($group);
+        foreach ($options as $key => $item) {
+            $checks .= '<div class="item mr-5">'
+                . Form::checkbox($field . '[]', $key,in_array($key,$data), ['id' => $field . $key, 'class' => 'form-control'])
+                . Form::label($field . $key, $item)
+                . '</div>';
+        }
+        return $checks;
+    }
+
+    static function makeOptions($options) {
+        if (!isset($options['from'])) {
+            return $options;
+        } else {
+            $take = $options['take'][1];
+            $id = $options['take'][0];
+            $temp = DB::table($options['from'])->select(DB::raw("CONCAT($take) as value, $id"));
+            /**aplica condiciones*/
+            if (isset($options['where'])) {
+                foreach ($options['where'] as $key => $value) {
+                    if(is_array($value)){
+                        switch ($value[0]){
+                            case 'whereIn':
+                                $temp->whereIn($value[1]);
+                                break;
+                            case 'whereNotIn':
+                                $temp->whereNotIn($value[0]);
+                                break;
+                            case 'whereNull':
+                                $temp->whereNull($value[1]);
+                                break;
+                            case 'whewreNotNull':
+                                $temp->whereNotNull($value[1]);
+                                break;
+                            default:
+                                $temp->where($value[0],$value[1],$value[2]);
+                                break;
+                        }
+                    }else{
+                        $temp->where($key,$value);
+                    }
+                }
+            }
+            /**aplica ordenamientos*/
+            if(isset($options['order'])){
+                $by=$options['order'][0];
+                $order=isset($options['order'][1])?$options['order'][1]:'ASC';
+                $temp->orderBy($by,$order);
+            }
+            return $temp->pluck('value', $id);
+        }
+    }
 
     public static function buildButtons($content) {
         $html = [];
