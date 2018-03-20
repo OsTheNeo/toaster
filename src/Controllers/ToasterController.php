@@ -57,7 +57,7 @@ class ToasterController extends Controller {
         $links = false;
 
         $howShowData = $model->schemas[$alias];
-        $nameTable = $model->table;
+        $nameTable = $model->getTable();
 
         if (isset($howShowData->parameters->customTable)) {
             $nameTable = $howShowData->parameters->customTable;
