@@ -222,8 +222,8 @@ class BladeEngine {
     */
     static function Translate($ask,$model) {
         /*Se cargan los diccionarios*/
-        $dictionary = (object)trans('toaster.dictionary');
-        $dictionaryModel = (object)trans('toaster.'.$model->getTable());
+        $dictionary = (object)trans('Toaster::toaster.dictionary');
+        $dictionaryModel = (object)trans('Toaster::toaster.'.$model->getTable());
         /*se toma el label de uno de los diccionarios*/
         if (isset($dictionaryModel->$ask)) {/*si existe el label en el diccionario del modelo se toma de este*/
             return $dictionaryModel->$ask;

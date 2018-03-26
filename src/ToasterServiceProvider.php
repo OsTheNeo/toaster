@@ -20,6 +20,9 @@ class ToasterServiceProvider extends ServiceProvider {
     public function boot() {
         $this->loadRoutesFrom(__DIR__ . '/routes/web.php');
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations/');
+
+        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'Toaster');
+        $this->publishes([__DIR__.'/../resources/lang' => resource_path('lang/vendor/Toaster'),],'dictionary');
     }
 
 
@@ -30,6 +33,6 @@ class ToasterServiceProvider extends ServiceProvider {
      */
     public function register() {
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'Toaster');
-        $this->publishes([__DIR__.'/../resources/lang' => resource_path('lang'),],'dictionary');
+        $this->publishes([__DIR__.'/../resources/views' => resource_path('views/vendor/Toaster'),],'views');
     }
 }
