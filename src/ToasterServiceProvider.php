@@ -30,5 +30,6 @@ class ToasterServiceProvider extends ServiceProvider {
      */
     public function register() {
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'Toaster');
+        $this->publishes([__DIR__.'/../resources/lang' => resource_path('lang'),],'dictionary');
     }
 }

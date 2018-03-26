@@ -147,7 +147,7 @@ class BladeEngine {
             $field = $field->field;
         }
 
-        $construct->label = Form::label($field, self::Translate($field));
+        $construct->label = Form::label($field, self::Translate($field,$model));
 
         switch ($kindInput) {
 
@@ -217,25 +217,22 @@ class BladeEngine {
                 break;
         }
     }
-
-    static function Translate($ask) {
-        $dictionary = (object)[
-            'name'            => 'Nombre',
-            'category'        => 'Categorias',
-            'vendor'          => 'Proveedor',
-            'brief'           => 'Descripcion corta',
-            'description'     => 'Descripcion',
-            'variant details' => 'Detalles'
-        ];
-
-
-        if (isset($dictionary->$ask)) {
+    /**
+     * carga el label para el campo desde uno de los diccionarios de la aplicacion
+    */
+    static function Translate($ask,$model) {
+        /*Se cargan los diccionarios*/
+        $dictionary = (object)trans('toaster.dictionary');
+        $dictionaryModel = (object)trans('toaster.'.$model->getTable());
+        /*se toma el label de uno de los diccionarios*/
+        if (isset($dictionaryModel->$ask)) {/*si existe el label en el diccionario del modelo se toma de este*/
+            return $dictionaryModel->$ask;
+        }elseif (isset($dictionary->$ask)) {/*si no existe se busca en el diccionario general*/
             return $dictionary->$ask;
         }
-
+        /*si no se envia el nombre del campo de la BD*/
         $ask = str_replace('_', ' ', $ask);
         return ucwords($ask);
-
     }
 
     static function DetailsTableField($field) {
