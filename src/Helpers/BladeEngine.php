@@ -100,7 +100,7 @@ class BladeEngine {
 
 
     public static function buildFields($content, $model) {
-        $table = collect(DB::select('describe ' . $model->table));
+        $table = collect(DB::select('describe ' . $model->getTable()));
         $construction = [];
 
         $fields = $model->fields;
