@@ -73,7 +73,7 @@ class BladeEngine {
                 }
 
                 if (!isset($columnDates[$column])) {
-                    $header .= "<th>" . self::Translate($column) . "</th>";
+                    $header .= "<th>" . self::Translate($column,$model) . "</th>";
                 }
 
             }
