@@ -52,6 +52,7 @@ class BladeEngine {
         $header = '';
         $content = (object)$content;
 
+
         if (isset($content->model)) {
 
             $model = $content->model;
@@ -73,7 +74,7 @@ class BladeEngine {
                 }
 
                 if (!isset($columnDates[$column])) {
-                    $header .= "<th>" . self::Translate($column,$model) . "</th>";
+                    $header .= "<th>" . self::Translate($column, $content->model) . "</th>";
                 }
 
             }
@@ -111,7 +112,7 @@ class BladeEngine {
         foreach ($fields as $key => $field) {
             $kindInput = '';
             if (!is_array($field)) {
-                $details = $table->where('Field', $field)->first();
+                $details = (object)$table->where('Field', $field)->first();
                 $parameters = self::DetailsTableField($details->Type);
                 $kindInput = self::dictionary($parameters->type);
             } else {
@@ -125,7 +126,7 @@ class BladeEngine {
                 }
 
             }
-            array_push($construction, self::buildHtmlField($field, $kindInput, $parameters,$model));
+            array_push($construction, self::buildHtmlField($field, $kindInput, $parameters, $model));
         }
 
         return $construction;
@@ -133,7 +134,7 @@ class BladeEngine {
 
     }
 
-    static function buildHtmlField($field, $kindInput, $parameters,$model) {
+    static function buildHtmlField($field, $kindInput, $parameters, $model) {
         /* para los que son fechas usa el mismo pero asignando diferentes clases para restringir el tipo de input*/
         if ($kindInput == 'date' or $kindInput == 'datetime' or $kindInput == 'time' or $kindInput == 'year') {
             $class = $kindInput;
@@ -147,7 +148,7 @@ class BladeEngine {
             $field = $field->field;
         }
 
-        $construct->label = Form::label($field, self::Translate($field,$model));
+        $construct->label = Form::label($field, self::Translate($field, $model));
 
         switch ($kindInput) {
 
@@ -188,7 +189,7 @@ class BladeEngine {
                 if (isset($parameters->group)) {
                     $data = Dictionary::groupDefinitions($parameters->group);
                 } else {
-
+                    $data = self::makeOptions($model->fields[$field]['data']);
                 }
 
                 $construct->field = Form::select($field, $data, null, ['class' => 'form-control']);
@@ -196,7 +197,7 @@ class BladeEngine {
                 break;
 
             case 'checkbox':
-                $construct->field = self::makeCheckbox($field,$parameters->group,$model);
+                $construct->field = self::makeCheckbox($field, $parameters->group, $model);
                 return $construct;
                 break;
 
@@ -217,17 +218,18 @@ class BladeEngine {
                 break;
         }
     }
+
     /**
      * carga el label para el campo desde uno de los diccionarios de la aplicacion
-    */
-    static function Translate($ask,$model) {
+     */
+    static function Translate($ask, $model) {
         /*Se cargan los diccionarios*/
-        $dictionary = (object)trans('Toaster::toaster.dictionary');
-        $dictionaryModel = (object)trans('Toaster::toaster.'.$model->getTable());
+        $dictionary = (object)trans('toaster.dictionary');
+        $dictionaryModel = (object)trans('toaster.' . $model->getTable());
         /*se toma el label de uno de los diccionarios*/
         if (isset($dictionaryModel->$ask)) {/*si existe el label en el diccionario del modelo se toma de este*/
             return $dictionaryModel->$ask;
-        }elseif (isset($dictionary->$ask)) {/*si no existe se busca en el diccionario general*/
+        } elseif (isset($dictionary->$ask)) {/*si no existe se busca en el diccionario general*/
             return $dictionary->$ask;
         }
         /*si no se envia el nombre del campo de la BD*/
@@ -279,17 +281,16 @@ class BladeEngine {
      * crea los campos checkbox y los carga en el formulario
      * @param string $construct
      */
-    public static function makeCheckbox($field, $group,$model)
-    {
-        $data=[];
-        if($model->suggested_products!=null){
-            $data=explode(',',$model->suggested_products);
+    public static function makeCheckbox($field, $group, $model) {
+        $data = [];
+        if ($model->suggested_products != null) {
+            $data = explode(',', $model->suggested_products);
         }
         $checks = "";
         $options = self::makeOptions($group);
         foreach ($options as $key => $item) {
             $checks .= '<div class="item mr-5">'
-                . Form::checkbox($field . '[]', $key,in_array($key,$data), ['id' => $field . $key, 'class' => 'form-control'])
+                . Form::checkbox($field . '[]', $key, in_array($key, $data), ['id' => $field . $key, 'class' => 'form-control'])
                 . Form::label($field . $key, $item)
                 . '</div>';
         }
@@ -297,6 +298,7 @@ class BladeEngine {
     }
 
     static function makeOptions($options) {
+
         if (!isset($options['from'])) {
             return $options;
         } else {
@@ -306,8 +308,8 @@ class BladeEngine {
             /**aplica condiciones*/
             if (isset($options['where'])) {
                 foreach ($options['where'] as $key => $value) {
-                    if(is_array($value)){
-                        switch ($value[0]){
+                    if (is_array($value)) {
+                        switch ($value[0]) {
                             case 'whereIn':
                                 $temp->whereIn($value[1]);
                                 break;
@@ -321,19 +323,19 @@ class BladeEngine {
                                 $temp->whereNotNull($value[1]);
                                 break;
                             default:
-                                $temp->where($value[0],$value[1],$value[2]);
+                                $temp->where($value[0], $value[1], $value[2]);
                                 break;
                         }
-                    }else{
-                        $temp->where($key,$value);
+                    } else {
+                        $temp->where($key, $value);
                     }
                 }
             }
             /**aplica ordenamientos*/
-            if(isset($options['order'])){
-                $by=$options['order'][0];
-                $order=isset($options['order'][1])?$options['order'][1]:'ASC';
-                $temp->orderBy($by,$order);
+            if (isset($options['order'])) {
+                $by = $options['order'][0];
+                $order = isset($options['order'][1]) ? $options['order'][1] : 'ASC';
+                $temp->orderBy($by, $order);
             }
             return $temp->pluck('value', $id);
         }

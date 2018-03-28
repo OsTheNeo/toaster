@@ -223,6 +223,7 @@
                                         @if(isset($pre))
                                             @foreach($pre as $hidden)
                                                 {!! Form::hidden($hidden[0], $hidden[1]) !!}
+
                                             @endforeach
                                         @endif
 
@@ -240,15 +241,15 @@
                                         @endforeach
 
 
-                                        @if(isset($custom))
-                                            @include($custom)
-                                        @endif
 
 
                                         @if(isset($gallery) and isset($model->id))
                                             @include('Toaster::Gallery')
                                         @endif
 
+                                        @if(isset($custom))
+                                            @include($custom)
+                                        @endif
 
 
                                         {!! Form::close() !!}
