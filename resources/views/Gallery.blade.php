@@ -24,5 +24,4 @@
     });
 </script>
 <script src="{{ asset('public/uploader/custom.js') }}" type="text/javascript"></script>
-
 <input type="file" name="files">

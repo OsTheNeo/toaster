@@ -107,12 +107,13 @@ class ToasterController extends Controller {
             $item = [];
 
             foreach ($row as $key => $value) {
-                $item[] = $value;
                 if (isset($replacement[$key])) {
                     if ($replacement[$key]['kind'] == 'group') {
                         $data = Dictionary::groupDefinitions($key);
                         $item[] = $data[$value];
                     }
+                }else{
+                    $item[] = $value;
                 }
 
 
@@ -175,7 +176,6 @@ class ToasterController extends Controller {
 
     public function update(Request $request, $id) {
         $model = $this->Model;
-
 
         if (isset($this->options->forms)) {
             foreach ($this->options->forms as $form) {
@@ -392,6 +392,35 @@ class ToasterController extends Controller {
 
         $path = $this->path($gallery->created_at);
         unlink('public/files/' . $path . '/' . $input['file']);
+    }
+
+
+    public function unserializeForms($forms) {
+        $formData = [];
+        $decode = json_decode($forms);
+
+        foreach ($decode as $form) {
+            parse_str($form, $vars);
+            unset($vars['_token']);
+            if (isset($vars['var-name'])) {
+                $variant_details = '';
+                foreach ($vars['var-name'] as $key => $value) {
+                    $variant_details[$value] = $vars['var-option'][$key];
+                }
+                unset($vars['var-name']);
+                unset($vars['var-option']);
+                $vars['variant_details'] = json_encode($variant_details);
+            }
+            array_push($formData, $vars);
+        }
+
+        foreach ($formData as $key => $form) {
+            if (isset($form['forms'])) {
+                unset($formData[$key]);
+            }
+        }
+
+        return $formData;
     }
 
 

@@ -11,61 +11,116 @@
     <title>{{ config('app.name', 'Tienda online') }}</title>
 
     <!-- Styles -->
-    <link href="{{ asset('public/css/app.css') }}" rel="stylesheet">
-    <script src="{{ asset('public/js/app.js') }}"></script>
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.40/css/uikit.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.40/js/uikit.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.40/js/uikit-icons.min.js"></script>
+
 </head>
 <body>
-<div id="app">
-    <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
-        <div class="container">
-            <a class="navbar-brand" href="{{ url('/') }}">
-                Tienda en linea
-            </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <!-- Left Side Of Navbar -->
-                <ul class="navbar-nav mr-auto">
+<div class="uk-offcanvas-content">
 
-                </ul>
 
-                <!-- Right Side Of Navbar -->
-                <ul class="navbar-nav ml-auto">
-                    <!-- Authentication Links -->
-                    @guest
-                        <li><a class="nav-link" href="{{ route('login') }}">Ingresar</a></li>
-                        <li><a class="nav-link" href="{{ route('register') }}">Registrarse</a></li>
-                        @else
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    {{ Auth::user()->name }} <span class="caret"></span>
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
+    <nav class="uk-navbar-container">
+        <div class="uk-container">
+            <div uk-navbar="" class="uk-navbar">
+                <div class="uk-navbar-left">
+
+                    <ul class="uk-navbar-nav">
+                        <li class="uk-active"><a class="uk-navbar-toggle" href="#" uk-toggle="target: #offcanvas-nav">
+                                <span uk-navbar-toggle-icon></span> <span class="uk-margin-small-left">Menu</span>
+                            </a></li>
+                    </ul>
+
+                </div>
+                <div class="uk-navbar-right">
+                    <ul class="uk-navbar-nav">
+                        @guest
+                            <li><a href="{{ route('login') }}">Ingresar</a></li>
+                            <li><a href="{{ route('register') }}">Registrarse</a></li>
+                            @else
+                                <li>
+                                    <a href="#">{{ Auth::user()->name }}</a>
+                                    <div class="uk-navbar-dropdown">
+                                        <ul class="uk-nav uk-navbar-dropdown-nav">
+                                            <li><a class="dropdown-item" href="{{ route('logout') }}"
+                                                   onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                        Logout
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                            @endguest
-                </ul>
+                                                    Logout
+                                                </a>
+                                            </li>
+                                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                                @csrf
+                                            </form>
+                                        </ul>
+                                    </div>
+                                </li>
+                                @endguest
+                    </ul>
+                </div>
             </div>
         </div>
     </nav>
 
-    <main class="py-4">
+
+    <div class="uk-offcanvas-content">
+
+        <div id="offcanvas-nav" uk-offcanvas="overlay: true">
+
+            <div class="uk-offcanvas-bar">
+                <h3>ADMIN</h3>
+                <button class="uk-offcanvas-close" type="button" uk-close></button>
+                <ul class="uk-nav uk-nav-default">
+                    <li>
+                        <a href="{!! route('products.index') !!}">
+                            <span class="uk-margin-small-right" uk-icon="icon: file-edit"></span>
+                            Productos
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{!! route('category.index') !!}">
+                            <span class="uk-margin-small-right" uk-icon="icon: tag"></span>
+                            Categorias
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{!! route('purchases.index') !!}">
+                            <span class="uk-margin-small-right" uk-icon="icon: cart"></span>
+                            Ordenes de compra
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{!! route('cellars.index') !!}">
+                            <span class="uk-margin-small-right" uk-icon="icon: album"></span>
+                            Inventario
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{!! route('admin.index') !!}">
+                            <span class="uk-margin-small-right" uk-icon="icon: users"></span>
+                            Clientes
+                        </a>
+                    </li>
+                    <hr class="uk-divider-icon">
+                    <li>
+                        <a href="#">
+                            <span class="uk-margin-small-right" uk-icon="icon: cog"></span>
+                            Configurar
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="uk-margin">
         @yield('content')
-    </main>
+    </div>
 </div>
 
-<!-- Scripts -->
 
 </body>
 </html>

@@ -47,11 +47,9 @@ class BladeEngine {
 
     public static function table($content) {
 
-        $table = '<table class="table" style="width:100%" id="' . $content->schema . '">';
         $columnDates = ['created_at', 'updated_at', 'deleted_at'];
         $header = '';
         $content = (object)$content;
-
 
         if (isset($content->model)) {
 
@@ -80,10 +78,8 @@ class BladeEngine {
             }
         }
 
-        $table .= "<thead>$header</thead>";
 
-
-        return $table;
+        return $header;
 
     }
 
@@ -148,17 +144,17 @@ class BladeEngine {
             $field = $field->field;
         }
 
-        $construct->label = Form::label($field, self::Translate($field, $model));
+        $construct->label = Form::label($field, self::Translate($field, $model), ['class' => 'uk-form-label uk-text-right']);
 
         switch ($kindInput) {
 
             case 'text':
-                $construct->field = Form::text($field, null, ['class' => 'form-control']);
+                $construct->field = Form::text($field, null, ['class' => 'uk-textarea' , 'rows'=>3]);
                 return $construct;
                 break;
 
             case 'textarea':
-                $construct->field = Form::textarea($field, null, ['rows' => '3', 'class' => 'form-control']);
+                $construct->field = Form::textarea($field, null, ['rows' => '3', 'class' => 'uk-input']);
                 return $construct;
                 break;
 
@@ -174,25 +170,23 @@ class BladeEngine {
                 break;
 
             case 'number':
-                $construct->field = Form::number($field, null, ['class' => 'form-control']);
+                $construct->field = Form::number($field, null, ['class' => 'uk-input']);
                 return $construct;
                 break;
 
             case 'date':
-                $construct->field = Form::text($field, null, ['class' => "$class"]);
+                $construct->field = Form::text($field, null, ['class' => "$class uk-input"]);
                 return $construct;
                 break;
 
             case 'select':
-                $construct->field = Form::text($field, null, ['class' => "form-control"]);
-
                 if (isset($parameters->group)) {
                     $data = Dictionary::groupDefinitions($parameters->group);
                 } else {
                     $data = self::makeOptions($model->fields[$field]['data']);
                 }
 
-                $construct->field = Form::select($field, $data, null, ['class' => 'form-control']);
+                $construct->field = Form::select($field, $data, null, ['class' => 'uk-select']);
                 return $construct;
                 break;
 
@@ -289,10 +283,9 @@ class BladeEngine {
         $checks = "";
         $options = self::makeOptions($group);
         foreach ($options as $key => $item) {
-            $checks .= '<div class="item mr-5">'
-                . Form::checkbox($field . '[]', $key, in_array($key, $data), ['id' => $field . $key, 'class' => 'form-control'])
-                . Form::label($field . $key, $item)
-                . '</div>';
+            $checks .= '<div class="uk-form-controls-text"><label>'
+                . Form::checkbox($field . '[]', $key, in_array($key, $data), ['id' => $field . $key, 'class' => 'uk-checkbox uk-margin-small-right'])
+                . $item . '</label></div>';
         }
         return $checks;
     }
@@ -350,14 +343,14 @@ class BladeEngine {
 
                 if ($parameters->kind == 'link') {
                     if (isset($parameters->parameters)) {
-                        $button = "<a href='" . route($parameters->route, $parameters->parameters) . "'>$parameters->text</a>";
+                        $button = "<a href='" . route($parameters->route, $parameters->parameters) . "' class='uk-button uk-button-default uk-button-small'>$parameters->text</a>";
                     } else {
-                        $button = "<a href='" . route($parameters->route) . "'>$parameters->text</a>";
+                        $button = "<a href='" . route($parameters->route) . "' class='uk-button uk-button-default uk-button-small'>$parameters->text</a>";
                     }
                 }
 
                 if ($parameters->kind == 'action') {
-                    $button = "<a onclick='$parameters->function'>$parameters->text</a>";
+                    $button = "<a class='uk-button uk-button-default uk-button-small' onclick='$parameters->function'>$parameters->text</a>";
                 }
 
                 if (!isset($html[$position])) {
@@ -374,7 +367,7 @@ class BladeEngine {
     }
 
     public static function buildLinks($model, $alias, $row) {
-        $links = "";
+        $links = "<div class='uk-button-group'>";
         foreach ($model->links[$alias] as $link) {
             if (sizeof($link) == 3) {
                 $parameters = [];
@@ -385,13 +378,13 @@ class BladeEngine {
                         array_push($parameters, $row->$parameter);
                     }
                 }
-
-                $links .= "<a class='button' href='" . route($link[1], $parameters) . "'>" . $link[0] . "</a>";
+                $links .= "<a class='uk-button uk-button-default uk-button-small' href='" . route($link[1], $parameters) . "'>" . $link[0] . "</a>";
             } else {
-                $links .= "<a class='button' href='route($link[1])'>$link[0]</a>";
+                $links .= "<a class='uk-button uk-button-default uk-button-small' href='route($link[1])'>$link[0]</a>";
             }
 
         }
+        $links .= '</div>';
         return $links;
     }
 
