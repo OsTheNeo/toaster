@@ -63,57 +63,58 @@
             </div>
         </div>
     </nav>
+    @if(Auth::check())
 
+        <div class="uk-offcanvas-content">
 
-    <div class="uk-offcanvas-content">
+            <div id="offcanvas-nav" uk-offcanvas="overlay: true">
 
-        <div id="offcanvas-nav" uk-offcanvas="overlay: true">
-
-            <div class="uk-offcanvas-bar">
-                <h3>ADMIN</h3>
-                <button class="uk-offcanvas-close" type="button" uk-close></button>
-                <ul class="uk-nav uk-nav-default">
-                    <li>
-                        <a href="{!! route('products.index') !!}">
-                            <span class="uk-margin-small-right" uk-icon="icon: file-edit"></span>
-                            Productos
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{!! route('category.index') !!}">
-                            <span class="uk-margin-small-right" uk-icon="icon: tag"></span>
-                            Categorias
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{!! route('purchases.index') !!}">
-                            <span class="uk-margin-small-right" uk-icon="icon: cart"></span>
-                            Ordenes de compra
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{!! route('cellars.index') !!}">
-                            <span class="uk-margin-small-right" uk-icon="icon: album"></span>
-                            Inventario
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{!! route('admin.index') !!}">
-                            <span class="uk-margin-small-right" uk-icon="icon: users"></span>
-                            Clientes
-                        </a>
-                    </li>
-                    <hr class="uk-divider-icon">
-                    <li>
-                        <a href="#">
-                            <span class="uk-margin-small-right" uk-icon="icon: cog"></span>
-                            Configurar
-                        </a>
-                    </li>
-                </ul>
+                <div class="uk-offcanvas-bar">
+                    <h3>ADMIN</h3>
+                    <button class="uk-offcanvas-close" type="button" uk-close></button>
+                    <ul class="uk-nav uk-nav-default">
+                        <li>
+                            <a href="{!! route('products.index') !!}">
+                                <span class="uk-margin-small-right" uk-icon="icon: file-edit"></span>
+                                Productos
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{!! route('category.index') !!}">
+                                <span class="uk-margin-small-right" uk-icon="icon: tag"></span>
+                                Categorias
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{!! route('purchases.index') !!}">
+                                <span class="uk-margin-small-right" uk-icon="icon: cart"></span>
+                                Ordenes de compra
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{!! route('cellars.index') !!}">
+                                <span class="uk-margin-small-right" uk-icon="icon: album"></span>
+                                Inventario
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{!! route('admin.index') !!}">
+                                <span class="uk-margin-small-right" uk-icon="icon: users"></span>
+                                Clientes
+                            </a>
+                        </li>
+                        <hr class="uk-divider-icon">
+                        <li>
+                            <a href="{!! route('settings') !!}">
+                                <span class="uk-margin-small-right" uk-icon="icon: cog"></span>
+                                Configurar
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
-    </div>
+    @endif
 
 
     <div class="uk-margin">
