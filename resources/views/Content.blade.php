@@ -1,6 +1,6 @@
-@extends('Toaster::Template.Layout')
+@extends(config('toaster.template'))
 
-@section('content')
+@section(config('toaster.content'))
 
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.dataTables.min.css">

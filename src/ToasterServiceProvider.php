@@ -29,7 +29,12 @@ class ToasterServiceProvider extends ServiceProvider {
      * @return void
      */
     public function register() {
+        $this->mergeConfigFrom(__DIR__.'/../config/toaster.php', 'toaster');
+        $this->publishes([__DIR__.'/../config/toaster.php' => config_path('toaster.php'),],"config");
+
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'Toaster');
+        $this->publishes([__DIR__.'/../resources/views' => resource_path('views/vendor/Toaster'),],'views');
+
         $this->publishes([__DIR__.'/../resources/lang' => resource_path('lang'),],'dictionary');
     }
 }
