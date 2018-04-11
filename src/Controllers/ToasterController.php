@@ -110,7 +110,7 @@ class ToasterController extends Controller {
                 if (isset($replacement[$key])) {
                     if ($replacement[$key]['kind'] == 'group') {
                         $data = Dictionary::groupDefinitions($key);
-                        $item[] = $data[$value];
+                        $item[] = isset($data[$value])?$data[$value]:'Indefinido';
                     }
                 }else{
                     $item[] = $value;
