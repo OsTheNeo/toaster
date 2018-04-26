@@ -149,12 +149,12 @@ class BladeEngine {
         switch ($kindInput) {
 
             case 'text':
-                $construct->field = Form::text($field, null, ['class' => 'uk-textarea' , 'rows'=>3]);
+                $construct->field = Form::text($field, null, ['class' => 'uk-input']);
                 return $construct;
                 break;
 
             case 'textarea':
-                $construct->field = Form::textarea($field, null, ['rows' => '3', 'class' => 'uk-input']);
+                $construct->field = Form::textarea($field, null, ['rows' => '5', 'class' => 'uk-textarea']);
                 return $construct;
                 break;
 
