@@ -85,11 +85,10 @@ class ToasterController extends Controller {
             $query->where(function ($query) use ($columns, $request, $search) {
                 $firstWhere = true;
                 foreach ($columns as $column) {
-                    $namecolumn = $column['db'];
                     if ($firstWhere == true) {
-                        $query->where($namecolumn, 'like', '%' . $search['value'] . '%');
+                        $query->where($column, 'like', '%' . $search . '%');
                     } else {
-                        $query->orWhere($namecolumn, 'like', '%' . $search['value'] . '%');
+                        $query->orWhere($column, 'like', '%' . $search . '%');
                     }
                     $firstWhere = false;
                 }
@@ -229,7 +228,8 @@ class ToasterController extends Controller {
     }
 
     public function show($id) {
-        dd($id);
+        $this->options['model']=$this->Model;
+        return view('Toaster::Content', $this->options);
     }
 
     public function delete($id) {
