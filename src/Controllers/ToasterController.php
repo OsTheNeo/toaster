@@ -27,7 +27,6 @@ class ToasterController extends Controller {
 
 
     public function index() {
-
         if (isset($this->admin))
             $this->options->extend = $this->admin;
 
@@ -85,10 +84,11 @@ class ToasterController extends Controller {
             $query->where(function ($query) use ($columns, $request, $search) {
                 $firstWhere = true;
                 foreach ($columns as $column) {
+                    $namecolumn = $column;
                     if ($firstWhere == true) {
-                        $query->where($column, 'like', '%' . $search . '%');
+                        $query->where($namecolumn, 'like', '%' . $search . '%');
                     } else {
-                        $query->orWhere($column, 'like', '%' . $search . '%');
+                        $query->orWhere($namecolumn, 'like', '%' . $search . '%');
                     }
                     $firstWhere = false;
                 }
@@ -96,6 +96,7 @@ class ToasterController extends Controller {
         }
 
         $recordsFiltered = $query->count();
+
         $query->skip($request['start']);
         $query->take($request['length']);
 
@@ -104,18 +105,15 @@ class ToasterController extends Controller {
         $temp = [];
         foreach ($data as $row) {
             $item = [];
-
             foreach ($row as $key => $value) {
                 if (isset($replacement[$key])) {
                     if ($replacement[$key]['kind'] == 'group') {
                         $data = Dictionary::groupDefinitions($key);
-                        $item[] = isset($data[$value])?$data[$value]:'Indefinido';
+                        $item[] = isset($data[$value]) ? $data[$value] : 'Indefinido';
                     }
-                }else{
+                } else {
                     $item[] = $value;
                 }
-
-
             }
 
             if ($links == true) {
@@ -156,7 +154,6 @@ class ToasterController extends Controller {
                 $model = $this->populate($model, $form);
             }
         } else {
-
         }
 
         $model->save();
@@ -169,8 +166,6 @@ class ToasterController extends Controller {
         } else {
             return redirect()->back();
         }
-
-
     }
 
     public function update(Request $request, $id) {
@@ -228,7 +223,9 @@ class ToasterController extends Controller {
     }
 
     public function show($id) {
-        $this->options['model']=$this->Model;
+        if (isset($this->admin))
+            $this->options->extend = $this->admin;
+
         return view('Toaster::Content', $this->options);
     }
 

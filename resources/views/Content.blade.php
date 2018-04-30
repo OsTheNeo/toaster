@@ -70,6 +70,11 @@
 
                         <div class="uk-container">
                             @if($content->visualization == 'list')
+                                <ul class="uk-list uk-list-striped">
+                                    @foreach($content->data as $key => $value)
+                                        <li> {!! $key !!} : {!! $value !!}</li>
+                                    @endforeach
+                                </ul>
 
                             @elseif($content->visualization == 'table')
                                 <table id="{!! $content->schema !!}" class="uk-table uk-table-small uk-table-hover">
@@ -180,11 +185,13 @@
 
                                 {!! Form::close() !!}
 
-                            @elseif($content->visualization == 'plain')
+                            @elseif($content['visualization'] == 'plain')
+
+                            @else
                                 <dl>
-                                    @foreach($content->rows as $key => $row)
-                                        <dt>{{$row}}</dt>
-                                        <dd>{{$model->$key}}</dd>
+                                    @foreach($content as $key => $value)
+                                        <dt>{{$key}}</dt>
+                                        <dd>{{$value}}</dd>
                                     @endforeach
                                 </dl>
                             @endif

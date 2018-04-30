@@ -154,7 +154,7 @@ class BladeEngine {
                 break;
 
             case 'textarea':
-                $construct->field = Form::textarea($field, null, ['rows' => '5', 'class' => 'uk-textarea']);
+                $construct->field = Form::textarea($field, null, ['rows' => '6', 'class' => 'uk-textarea']);
                 return $construct;
                 break;
 
