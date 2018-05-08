@@ -110,6 +110,8 @@ class ToasterController extends Controller {
                     if ($replacement[$key]['kind'] == 'group') {
                         $data = Dictionary::groupDefinitions($key);
                         $item[] = isset($data[$value]) ? $data[$value] : 'Indefinido';
+                    }elseif ($replacement[$key]['kind'] == 'json'){
+                        $item[]=Dictionary::jsonDefinitionValue($value,$replacement[$key]['value'],isset($replacement[$key]['splitData'])?$replacement[$key]['splitData']:null);
                     }
                 } else {
                     $item[] = $value;

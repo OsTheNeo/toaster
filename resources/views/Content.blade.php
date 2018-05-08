@@ -111,7 +111,7 @@
                                                             "searchable": false
                                                         }
                                                     ],
-                                                    "order": [[0, "desc"]],
+                                                    "order": [[{!! isset($content->orderBy)?$content->orderBy:'0, "desc"' !!}]],
                                                     "processing": true,
                                                     "serverSide": true,
                                                     "pageLength": 10,
