@@ -95,6 +95,12 @@ class ToasterController extends Controller {
             });
         }
 
+        if($data['order'][0]['column']){
+            $orderColumn = $columns[$data['order'][0]['column']];
+            $dir = $data['order'][0]['dir'];
+            $query->orderBy($orderColumn, $dir);
+        }
+
         $recordsFiltered = $query->count();
 
         $query->skip($request['start']);
