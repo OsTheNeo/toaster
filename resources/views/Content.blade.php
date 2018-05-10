@@ -107,7 +107,7 @@
                                                     "columnDefs": [
                                                         {
                                                             "targets": [0],
-                                                            "visible": false,
+                                                            "visible": {!! isset($content->visibleId)?$content->visibleId:'false' !!},
                                                             "searchable": false
                                                         }
                                                     ],
