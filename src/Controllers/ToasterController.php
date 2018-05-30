@@ -95,6 +95,12 @@ class ToasterController extends Controller {
             });
         }
 
+        if($data['order'][0]['column']){
+            $orderColumn = $columns[$data['order'][0]['column']];
+            $dir = $data['order'][0]['dir'];
+            $query->orderBy($orderColumn, $dir);
+        }
+
         $recordsFiltered = $query->count();
 
         $query->skip($request['start']);
@@ -110,6 +116,8 @@ class ToasterController extends Controller {
                     if ($replacement[$key]['kind'] == 'group') {
                         $data = Dictionary::groupDefinitions($key);
                         $item[] = isset($data[$value]) ? $data[$value] : 'Indefinido';
+                    }elseif ($replacement[$key]['kind'] == 'json'){
+                        $item[]=Dictionary::jsonDefinitionValue($value,$replacement[$key]['value'],isset($replacement[$key]['splitData'])?$replacement[$key]['splitData']:null);
                     }
                 } else {
                     $item[] = $value;

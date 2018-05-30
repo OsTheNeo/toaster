@@ -111,7 +111,7 @@
                                                             "searchable": false
                                                         }
                                                     ],
-                                                    "order": [[0, "desc"]],
+                                                    "order": [[{!! isset($content->orderBy)?$content->orderBy:'0, "desc"' !!}]],
                                                     "processing": true,
                                                     "serverSide": true,
                                                     "pageLength": 10,
@@ -185,13 +185,11 @@
 
                                 {!! Form::close() !!}
 
-                            @elseif($content['visualization'] == 'plain')
-
-                            @else
+                            @elseif($content->visualization == 'plain')
                                 <dl>
-                                    @foreach($content as $key => $value)
-                                        <dt>{{$key}}</dt>
-                                        <dd>{{$value}}</dd>
+                                    @foreach($content->rows as $key => $row)
+                                        <dt>{{$row}}</dt>
+                                        <dd>{{$model->$key}}</dd>
                                     @endforeach
                                 </dl>
                             @endif

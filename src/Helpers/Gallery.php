@@ -13,7 +13,7 @@ use OsTheNeo\Toaster\Models\Gallery as GalleryModel;
 class Gallery {
     public static function icon($model, $id) {
         $folder = 'public/files/';
-        $gallery = GalleryModel::where('binded', $model . '-' . $id)->first();
+        $gallery = \OsTheNeo\Toaster\Models\Gallery::where('binded', $model . '-' . $id)->first();
         if ($gallery) {
             $images = json_decode($gallery->images, true);
             if (sizeof($images) > 0) {
@@ -38,9 +38,7 @@ class Gallery {
 
     public static function Gallery($model, $id) {
 
-
-        $bin = [$model => "$id"];
-        $gallery = \App\Models\Store\Gallery::where('binded', json_encode($bin))->first();
+        $gallery = \OsTheNeo\Toaster\Models\Gallery::where('binded', "$model-$id")->first();
 
         if ($gallery) {
             $path = explode(' ', $gallery->created_at);
