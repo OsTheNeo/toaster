@@ -158,6 +158,11 @@ class BladeEngine {
                 return $construct;
                 break;
 
+            case 'color':
+                $construct->field = Form::text($field, null, ['class'=>'uk-input jscolor']);
+                return $construct;
+                break;
+
             case 'password':
                 $construct->field = Form::password($field);
                 return $construct;
@@ -392,5 +397,11 @@ class BladeEngine {
 
     }
 
+    public static function formatPrice($price)
+    {
+        $price = explode('.', $price);
+        $price = str_replace(',', '', $price[0]);
+        return number_format(round($price), 0, ',', '.');
+    }
 
 }
