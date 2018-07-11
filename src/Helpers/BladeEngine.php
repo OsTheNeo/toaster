@@ -149,17 +149,12 @@ class BladeEngine {
         switch ($kindInput) {
 
             case 'text':
-                $construct->field = Form::text($field, null, ['class' => 'uk-textarea' , 'rows'=>3]);
+                $construct->field = Form::text($field, null, ['class' => 'uk-input']);
                 return $construct;
                 break;
 
             case 'textarea':
-                $construct->field = Form::textarea($field, null, ['rows' => '3', 'class' => 'uk-input']);
-                return $construct;
-                break;
-
-            case 'color':
-                $construct->field = Form::text($field, null, ['class'=>'uk-input jscolor']);
+                $construct->field = Form::textarea($field, null, ['rows' => '6', 'class' => 'uk-textarea']);
                 return $construct;
                 break;
 
@@ -397,11 +392,5 @@ class BladeEngine {
 
     }
 
-    public static function formatPrice($price)
-    {
-        $price = explode('.', $price);
-        $price = str_replace(',', '', $price[0]);
-        return number_format(round($price), 0, ',', '.');
-    }
 
 }

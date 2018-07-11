@@ -9,10 +9,6 @@
     <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="//cdn.datatables.net/responsive/2.1.1/js/dataTables.responsive.min.js"></script>
 
-    @if(isset($color))
-        <script type="text/javascript" src="{!! asset('public/js/jscolor.js') !!}"></script>
-    @endif
-
 
     <div class="uk-container">
         <div>
@@ -111,7 +107,7 @@
                                                     "columnDefs": [
                                                         {
                                                             "targets": [0],
-                                                            "visible": {!! isset($content->visibleId)?$content->visibleId:'false' !!},
+                                                            "visible": false,
                                                             "searchable": false
                                                         }
                                                     ],
