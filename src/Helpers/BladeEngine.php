@@ -179,6 +179,11 @@ class BladeEngine {
                 return $construct;
                 break;
 
+            case 'float':
+                $construct->field = Form::number($field, null, ['class' => 'uk-input',"step"=>"any"]);
+                return $construct;
+                break;
+
             case 'date':
                 $construct->field = Form::text($field, null, ['class' => "$class uk-input"]);
                 return $construct;
@@ -251,8 +256,8 @@ class BladeEngine {
             'text'     => ['char', 'varchar', 'tinytext', 'binary', 'varbinary', 'tinyblob'],
             'textarea' => ['text', 'mediumtext', 'longtext', 'blob', 'mediumblob', 'longtext'],
             'number'   => ['bit', 'tinyint', 'smallint', 'mediumint', 'int', 'integer', 'bigint',
-                'decimal', 'dec', 'numeric', 'fixed', 'float', 'double', 'real', 'float', 'bool',
-                'boolean'],
+                'numeric', 'fixed', 'bool','boolean'],
+            'float'=>['decimal', 'dec','float', 'double', 'real'],
             'date'     => ['date'],
             'datetime' => ['datetime', 'timestamp'],
             'time'     => ['time'],
