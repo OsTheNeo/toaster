@@ -123,7 +123,7 @@
                                                         "url": "https://cdn.datatables.net/plug-ins/1.10.12/i18n/Spanish.json"
                                                     },
                                                     "ajax": $.fn.dataTable.pipeline({
-                                                        url: '{{ route('server.pipeline', $content->schema) }}',
+                                                        url: '{!! route('server.pipeline', $content->schema).(isset($content->filters)?"?".$content->filters:"") !!}',
                                                         pages: 5
                                                     })
                                                 });
