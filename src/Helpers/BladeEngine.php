@@ -111,7 +111,10 @@ class BladeEngine {
                 $details = (object)$table->where('Field', $field)->first();
                 $parameters = self::DetailsTableField($details->Type);
                 $kindInput = self::dictionary($parameters->type);
-            } else {
+            }elseif(isset($field['type'])){
+                $kindInput=$field['type'];
+                $field=$key;
+            }else {
                 $details = $table->where('Field', $key)->first();
                 $parameters = self::DetailsTableField($details->Type);
                 $field = (object)$field;
@@ -164,7 +167,7 @@ class BladeEngine {
                 break;
 
             case 'password':
-                $construct->field = Form::password($field);
+                $construct->field = Form::password($field, ['class'=>'uk-input jscolor']);
                 return $construct;
                 break;
 
