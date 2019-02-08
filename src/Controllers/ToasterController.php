@@ -77,6 +77,13 @@ class ToasterController extends Controller {
 
 
         $query->select($columns);
+        if(isset($data['filter'])){
+            foreach ($data['filter'] as $key=>$filter){
+                if(!is_array($filter)){
+                    $query->where($key,$filter);
+                }
+            }
+        }
         $recordsTotal = $query->count();
 
         if ($data['search']['value'] != null) {
