@@ -119,7 +119,7 @@ class BladeEngine {
                 $parameters = self::DetailsTableField($details->Type);
                 $field = (object)$field;
                 $field->field = $key;
-                $kindInput = $field->kind;
+                $kindInput = isset($field->kind)?$field->kind:self::dictionary($parameters->type);
                 if (isset($field->group)) {
                     $parameters->group = $field->group;
                 }
@@ -147,27 +147,31 @@ class BladeEngine {
             $field = $field->field;
         }
 
-        $construct->label = Form::label($field, self::Translate($field, $model), ['class' => 'uk-form-label uk-text-right']);
+        $options=[];
+        if(isset($model->fields[$field]['options']))
+            $options=$model->fields[$field]['options'];
+
+        $construct->label = Form::label($field, self::Translate($field, $model), array_merge(['class' => 'uk-form-label uk-text-right'],$options));
 
         switch ($kindInput) {
 
             case 'text':
-                $construct->field = Form::text($field, null, ['class' => 'uk-textarea' , 'rows'=>3]);
+                $construct->field = Form::text($field, null, array_merge(['class' => 'uk-textarea' , 'rows'=>3],$options));
                 return $construct;
                 break;
 
             case 'textarea':
-                $construct->field = Form::textarea($field, null, ['rows' => '3', 'class' => 'uk-textarea']);
+                $construct->field = Form::textarea($field, null, array_merge(['rows' => '3', 'class' => 'uk-textarea'],$options));
                 return $construct;
                 break;
 
             case 'color':
-                $construct->field = Form::text($field, null, ['class'=>'uk-input jscolor']);
+                $construct->field = Form::text($field, null, array_merge(['class'=>'uk-input jscolor'],$options));
                 return $construct;
                 break;
 
             case 'password':
-                $construct->field = Form::password($field, ['class'=>'uk-input jscolor']);
+                $construct->field = Form::password($field, array_merge(['class'=>'uk-input jscolor'],$options));
                 return $construct;
                 break;
 
@@ -178,17 +182,17 @@ class BladeEngine {
                 break;
 
             case 'number':
-                $construct->field = Form::number($field, null, ['class' => 'uk-input']);
+                $construct->field = Form::number($field, null, array_merge(['class' => 'uk-input'],$options));
                 return $construct;
                 break;
 
             case 'float':
-                $construct->field = Form::number($field, null, ['class' => 'uk-input',"step"=>"any"]);
+                $construct->field = Form::number($field, null, array_merge(['class' => 'uk-input',"step"=>"any"],$options));
                 return $construct;
                 break;
 
             case 'date':
-                $construct->field = Form::text($field, null, ['class' => "$class uk-input"]);
+                $construct->field = Form::text($field, null, array_merge(['class' => "$class uk-input"],$options));
                 return $construct;
                 break;
 
@@ -199,7 +203,7 @@ class BladeEngine {
                     $data = self::makeOptions($model->fields[$field]['data']);
                 }
 
-                $construct->field = Form::select($field, $data, null, ['class' => 'uk-select']);
+                $construct->field = Form::select($field, $data, null, array_merge(['class' => 'uk-select'],$options));
                 return $construct;
                 break;
 
@@ -209,7 +213,7 @@ class BladeEngine {
                 break;
 
             case 'tags':
-                $construct->field = Form::text($field, null, ['class' => "form-control tags"]);
+                $construct->field = Form::text($field, null, array_merge(['class' => "form-control tags"],$options));
                 return $construct;
                 break;
 
