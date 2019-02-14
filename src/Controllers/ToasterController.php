@@ -125,6 +125,9 @@ class ToasterController extends Controller {
                         $item[] = isset($data[$value]) ? $data[$value] : 'Indefinido';
                     }elseif ($replacement[$key]['kind'] == 'json'){
                         $item[]=Dictionary::jsonDefinitionValue($value,$replacement[$key]['value'],isset($replacement[$key]['splitData'])?$replacement[$key]['splitData']:null);
+                    }elseif ($replacement[$key]['kind'] == 'groupCustom'){
+                        $data=Dictionary::groupCustomDefinitions($key,$replacement[$key]['parameters']);
+                        $item[] = isset($data[$value]) ? $data[$value] : 'Indefinido';
                     }
                 } else {
                     $item[] = $value;
