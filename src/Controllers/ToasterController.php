@@ -120,18 +120,18 @@ class ToasterController extends Controller {
             $item = [];
             foreach ($row as $key => $value) {
                 if (isset($replacement[$key])) {
+                    $itemAux=null;
                     if ($replacement[$key]['kind'] == 'group') {
                         $data = Dictionary::groupDefinitions($key);
-                        $item[] = isset($data[$value]) ? $data[$value] : 'Indefinido';
+                        $itemAux = isset($data[$value]) ? $data[$value] : 'Indefinido';
                     }elseif ($replacement[$key]['kind'] == 'json'){
-                        $item[]=Dictionary::jsonDefinitionValue($value,$replacement[$key]['value'],isset($replacement[$key]['splitData'])?$replacement[$key]['splitData']:null);
+                        $itemAux=Dictionary::jsonDefinitionValue($value,$replacement[$key]['value'],isset($replacement[$key]['splitData'])?$replacement[$key]['splitData']:null);
                     }elseif ($replacement[$key]['kind'] == 'groupCustom'){
-                        $data=Dictionary::groupCustomDefinitions($key,$replacement[$key]['parameters']);
-                        $item[] = isset($data[$value]) ? $data[$value] : 'Indefinido';
+                        $itemAux=Dictionary::groupCustomDefinitions($key,$replacement[$key]['parameters'],compact('row','value','model'));
                     }
-                } else {
-                    $item[] = $value;
+                    if($itemAux) $value=$itemAux;
                 }
+                $item[] = $value;
             }
 
             if ($links == true) {
