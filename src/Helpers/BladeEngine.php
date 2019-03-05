@@ -151,6 +151,13 @@ class BladeEngine {
         if(isset($model->fields[$field]['options']))
             $options=$model->fields[$field]['options'];
 
+        if($kindInput=='h2'){
+            $construct->label = null;
+            $construct->field = null;
+            $construct->include=$model->fields[$field]['title'];
+            return $construct;
+        }
+
         $construct->label = Form::label($field, self::Translate($field, $model), array_merge(['class' => 'uk-form-label uk-text-right'],$options));
 
         switch ($kindInput) {
