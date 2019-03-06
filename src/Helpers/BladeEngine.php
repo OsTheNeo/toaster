@@ -113,6 +113,8 @@ class BladeEngine {
                 $kindInput = self::dictionary($parameters->type);
             }elseif(isset($field['type'])){
                 $kindInput=$field['type'];
+                unset($field['type']);
+                if (count($field)>0) $parameters =(object) $field;
                 $field=$key;
             }else {
                 $details = $table->where('Field', $key)->first();
@@ -302,8 +304,8 @@ class BladeEngine {
      */
     public static function makeCheckbox($field, $group, $model) {
         $data = [];
-        if ($model->$group != null) {
-            $data = explode(',', $model->$group);
+        if ($model->$field != null) {
+            $data = explode(',', $model->$field);
         }
         $checks = "";
         $options = self::makeOptions($group);
