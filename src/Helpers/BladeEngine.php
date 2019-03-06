@@ -298,11 +298,12 @@ class BladeEngine {
     /**
      * crea los campos checkbox y los carga en el formulario
      * @param string $construct
+     * @return string
      */
     public static function makeCheckbox($field, $group, $model) {
         $data = [];
-        if ($model->suggested_products != null) {
-            $data = explode(',', $model->suggested_products);
+        if ($model->$group != null) {
+            $data = explode(',', $model->$group);
         }
         $checks = "";
         $options = self::makeOptions($group);
