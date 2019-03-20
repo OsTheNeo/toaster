@@ -80,7 +80,26 @@ class ToasterController extends Controller {
         if(isset($data['filter'])){
             foreach ($data['filter'] as $key=>$filter){
                 if(!is_array($filter)){
-                    $query->where($key,$filter);
+                    switch ($key){
+                        case 'isNull':
+                            $query->whereNull($filter);
+                            break;
+                        case 'notNull':
+                            $query->whereNotNull($filter);
+                            break;
+                        default:
+                            $query->where($key,$filter);
+                            break;
+                    }
+                }else{
+                    switch ($key){
+                        case 'or':
+                            $query->orWhere($filter[0],$filter[1],$filter[2]);
+                            break;
+                        default:
+                            $query->where($filter[0],$filter[1],$filter[2]);
+                            break;
+                    }
                 }
             }
         }
