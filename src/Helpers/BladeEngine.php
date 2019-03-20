@@ -393,7 +393,7 @@ class BladeEngine {
     public static function buildLinks($model, $alias, $row) {
         $links = "<div class='uk-button-group'>";
         foreach ($model->links[$alias] as $link) {
-            if (sizeof($link) == 3) {
+            if (sizeof($link) >= 3) {
                 $parameters = [];
                 foreach (collect($link[2]) as $parameter) {
                     if ($parameter[0] == '_') {
@@ -402,7 +402,13 @@ class BladeEngine {
                         array_push($parameters, $row->$parameter);
                     }
                 }
-                $links .= "<a class='uk-button uk-button-default uk-button-small' href='" . route($link[1], $parameters) . "'>" . $link[0] . "</a>";
+                if(isset($link[3]) and ($link[3]=='delete' or $link[3]=='destroy')){
+                    $links.=FormFacade::open(['route'=>[$link[1],$parameters[0]],'method' => 'delete'])
+                        ."<input type='submit' value='$link[0]' class='uk-button uk-button-default uk-button-small' onclick='confirm(\"¿Desea eliminar el registro?\")'/>"
+                        .FormFacade::close();
+                }else{
+                    $links .= "<a class='uk-button uk-button-default uk-button-small' href='" . route($link[1], $parameters) . "'>" . $link[0] . "</a>";
+                }
             } else {
                 $links .= "<a class='uk-button uk-button-default uk-button-small' href='route($link[1])'>$link[0]</a>";
             }
