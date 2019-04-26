@@ -229,7 +229,7 @@ class BladeEngine {
             case 'radio':
                 break;
             case 'file':
-                $construct->field = Form::file($field,$options);
+                $construct->field = Form::file($field,array_merge(['class' => 'uk-input'],$options));
                 return $construct;
             case 'custom':
                 $construct->label = null;
