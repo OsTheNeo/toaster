@@ -148,6 +148,7 @@
 
                                 @php
                                     $saveButton = true;
+                                    if(isset($submitButton)) $saveButton = !$submitButton;
                                 @endphp
 
                                 @if($access == 'edit')
@@ -186,6 +187,11 @@
                                     @include($custom)
                                 @endif
 
+                                    @if(!$saveButton)
+                                        <div class="uk-margin uk-text-center">
+                                            {!! Form::submit('Guardar Cambios',['class'=>'uk-button uk-button-primary']) !!}
+                                        </div>
+                                    @endif
 
                                 {!! Form::close() !!}
 
@@ -203,7 +209,7 @@
                 </div>
             @endforeach
 
-            @if(isset($saveButton))
+            @if(isset($saveButton) and $saveButton)
                 <div class="uk-margin uk-text-center">
                     <button type="button" class="uk-button uk-button-primary" onclick="saveForms();">Guardar Cambios</button>
                 </div>
@@ -211,42 +217,85 @@
 
             {{ \OsTheNeo\Toaster\BladeEngine::defineVars() }}
 
-            @if($content->visualization == 'form')
-                <script>
-                    $("form").submit(function (e) {
-                        return false;
-                    });
+                @if($content->visualization == 'form')
+                    @if($saveButton)
+                        <script>
+                            $("form").submit(function (e) {
+                                return false;
+                            });
 
-                    function saveForms() {
-                        var forms = [];
-                        var action = '';
-                        $("form").each(function () {
-                            if ($(this).attr('method') === 'POST') {
-                                action = $(this).attr('action');
-                                forms.push($(this).serialize());
+                            function saveForms() {
+                                var forms = [];
+                                var action = '';
+                                $("form").each(function () {
+                                    if ($(this).attr('method') === 'POST') {
+                                        action = $(this).attr('action');
+                                        forms.push($(this).serialize());
+                                    }
+                                });
+
+                                var form = $(document.createElement('form'));
+                                $(form).attr("action", action);
+                                $(form).attr("method", "POST");
+
+                                var input = $("<input>").attr("type", "hidden").attr("name", "forms").val(JSON.stringify(forms));
+                                $(form).append($(input));
+                                var input = $("<input>").attr("type", "hidden").attr("name", "_token").val('{{ csrf_token() }}');
+                                $(form).append($(input));
+
+                                        @if($access == 'edit')
+                                var input = $("<input>").attr("type", "hidden").attr("name", "_method").val('patch');
+                                $(form).append($(input));
+                                @endif
+
+                                form.appendTo(document.body);
+                                $(form).submit();
+
                             }
-                        });
-
-                        var form = $(document.createElement('form'));
-                        $(form).attr("action", action);
-                        $(form).attr("method", "POST");
-
-                        var input = $("<input>").attr("type", "hidden").attr("name", "forms").val(JSON.stringify(forms));
-                        $(form).append($(input));
-                        var input = $("<input>").attr("type", "hidden").attr("name", "_token").val('{{ csrf_token() }}');
-                        $(form).append($(input));
-
-                                @if($access == 'edit')
-                        var input = $("<input>").attr("type", "hidden").attr("name", "_method").val('patch');
-                        $(form).append($(input));
+                        </script>
+                    @endif
+                    @if(isset($content->date))
+                        @if(isset($content->date['date']) or isset($content->date['datetime']))
+                            <link rel="stylesheet" type="text/css" href="{!! URL::asset('public/css/jquery.datetimepicker.min.css') !!}" />
+                            <script src="{!! URL::asset('public/js/jquery.datetimepicker.full.js') !!}"></script>
                         @endif
-
-                        form.appendTo(document.body);
-                        $(form).submit();
-
-                    }
-                </script>
-            @endif
+                        @if(isset($content->date['time']))
+                            <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.3/jquery.timepicker.min.css" />
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.3/jquery.timepicker.min.js"></script>
+                        @endif
+                        <script>
+                            $(document).ready(function () {
+                                $.datetimepicker.setLocale('es');
+                                @if(isset($content->date['date']))
+                                $('.date').datetimepicker({
+                                    dayOfWeekStart: 1,
+                                    lang: 'es',
+                                    timepicker: false,
+                                    format: 'Y-m-d',
+                                    scrollMonth : false,
+                                    scrollInput : false
+                                });
+                                @endif
+                                @if(isset($content->date['datetime']))
+                                $('.datetime').datetimepicker({
+                                    dayOfWeekStart: 1,
+                                    lang: 'es',
+                                    timepicker: true,
+                                    format: 'Y-m-d h:i:s',
+                                    scrollMonth : false,
+                                    scrollInput : false
+                                });
+                                @endif
+                                @if(isset($content->date['time']))
+                                $('.time').timepicker({
+                                    timeFormat: 'HH:mm:ss',
+                                    interval: 10,
+                                });
+                                @endif
+                            });
+                        </script>
+                    @endif
+                @endif
 
             @foreach(\OsTheNeo\Toaster\BladeEngine::JsIncludes($contents) as $js)
                 <link rel="stylesheet" href="{{$js}}">

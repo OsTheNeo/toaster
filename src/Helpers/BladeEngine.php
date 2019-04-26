@@ -407,9 +407,9 @@ class BladeEngine {
                     }
                 }
                 if(isset($link[3]) and ($link[3]=='delete' or $link[3]=='destroy')){
-                    $links.=FormFacade::open(['route'=>[$link[1],$parameters[0]],'method' => 'delete'])
+                    $links.=Form::open(['route'=>[$link[1],$parameters[0]],'method' => 'delete'])
                         ."<input type='submit' value='$link[0]' class='uk-button uk-button-default uk-button-small' onclick='return confirm(\"¿Desea eliminar el registro?\")'/>"
-                        .FormFacade::close();
+                        .Form::close();
                 }else{
                     $links .= "<a class='uk-button uk-button-default uk-button-small' href='" . route($link[1], $parameters) . "'>" . $link[0] . "</a>";
                 }
