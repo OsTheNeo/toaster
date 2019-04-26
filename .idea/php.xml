@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="PhpUnit">
-    <phpunit_settings>
-      <PhpUnitSettings configuration_file_path="/home/jaime/www/toaster/phpunit.xml" custom_loader_path="/home/jaime/www/toaster/composer.json" phpunit_phar_path="/home/jaime/www/toaster/phpunit.phar" use_configuration_file="true" />
-    </phpunit_settings>
-  </component>
-</project>
