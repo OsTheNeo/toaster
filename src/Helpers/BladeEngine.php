@@ -229,7 +229,8 @@ class BladeEngine {
             case 'radio':
                 break;
             case 'file':
-                break;
+                $construct->field = Form::file($field,$options);
+                return $construct;
             case 'custom':
                 $construct->label = null;
                 $construct->field = null;
