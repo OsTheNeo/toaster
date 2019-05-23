@@ -107,6 +107,10 @@ class BladeEngine {
 
         foreach ($fields as $key => $field) {
             $kindInput = '';
+            $options=[];
+            if(isset($field['options']))
+                $options=$field['options'];
+
             if (!is_array($field)) {
                 $details = (object)$table->where('Field', $field)->first();
                 $parameters = self::DetailsTableField($details->Type);
@@ -127,7 +131,7 @@ class BladeEngine {
                 }
 
             }
-            array_push($construction, self::buildHtmlField($field, $kindInput, $parameters, $model));
+            array_push($construction, self::buildHtmlField($field, $kindInput, $parameters, $model,$options));
         }
 
         return $construction;
@@ -135,7 +139,7 @@ class BladeEngine {
 
     }
 
-    static function buildHtmlField($field, $kindInput, $parameters, $model) {
+    static function buildHtmlField($field, $kindInput, $parameters, $model,$options) {
         /* para los que son fechas usa el mismo pero asignando diferentes clases para restringir el tipo de input*/
         if ($kindInput == 'date' or $kindInput == 'datetime' or $kindInput == 'time' or $kindInput == 'year') {
             $class = $kindInput;
@@ -148,10 +152,6 @@ class BladeEngine {
             $initField = $field;
             $field = $field->field;
         }
-
-        $options=[];
-        if(isset($model->fields[$field]['options']))
-            $options=$model->fields[$field]['options'];
 
         if($kindInput=='h2'){
             $construct->label = null;
