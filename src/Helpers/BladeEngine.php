@@ -392,5 +392,11 @@ class BladeEngine {
 
     }
 
+    public static function formatPrice($price)
+    {
+        $price = explode('.', $price);
+        $price = str_replace(',', '', $price[0]);
+        return number_format(round($price), 0, ',', '.');
+    }
 
 }

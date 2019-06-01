@@ -13,7 +13,7 @@ use OsTheNeo\Toaster\Models\Gallery as GalleryModel;
 class Gallery {
     public static function icon($model, $id) {
         $folder = 'public/files/';
-        $gallery = GalleryModel::where('binded', $model . '-' . $id)->first();
+        $gallery = \OsTheNeo\Toaster\Models\Gallery::where('binded', $model . '-' . $id)->first();
         if ($gallery) {
             $images = json_decode($gallery->images, true);
             if (sizeof($images) > 0) {
@@ -26,7 +26,6 @@ class Gallery {
         } else {
             return $folder.'no-thumbnail.png';
         }
-
     }
 
     public static function viewGallery() {
@@ -37,24 +36,17 @@ class Gallery {
 
 
     public static function Gallery($model, $id) {
-
-
-        $bin = [$model => "$id"];
-        $gallery = \App\Models\Store\Gallery::where('binded', json_encode($bin))->first();
-
+        $folder = 'public/files/';
+        $gallery = \OsTheNeo\Toaster\Models\Gallery::where('binded', "$model-$id")->first();
         if ($gallery) {
             $path = explode(' ', $gallery->created_at);
             $path = explode('-', $path[0]);
-
             if ($gallery->images) {
                 $images = json_decode($gallery->images);
-
                 $temp = [];
-
                 foreach ($images as $image) {
-                    $temp[] = $path[0] . '/' . $path[1] . '/' . $image;
+                    $temp[] = $folder.$path[0] . '/' . $path[1] . '/' . $image;
                 }
-
                 return $temp;
             }
         }
