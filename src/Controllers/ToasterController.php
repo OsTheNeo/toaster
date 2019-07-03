@@ -96,6 +96,17 @@ class ToasterController extends Controller {
                         case 'or':
                             $query->orWhere($filter[0],$filter[1],$filter[2]);
                             break;
+                        case 'join':
+                            if($filter[0]=='function')
+                                $query->join($filter[0],function ($join) use($filter){
+                                    $join->on($filter[1][0],$filter[1][1],$filter[1][2],$filter[1][3]);
+                                    foreach ($filter[2] as $item){
+                                        $join->where($item[0],$item[1],$item[2]);
+                                    }
+                                });
+                            else
+                                $query->join($filter[0],$filter[1],$filter[2],$filter[3]);
+                            break;
                         default:
                             $query->where($filter[0],$filter[1],$filter[2]);
                             break;
