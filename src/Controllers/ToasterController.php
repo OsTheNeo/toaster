@@ -98,8 +98,8 @@ class ToasterController extends Controller {
                             break;
                         case 'join':
                             if($filter[0]=='function')
-                                $query->join($filter[0],function ($join) use($filter){
-                                    $join->on($filter[1][0],$filter[1][1],$filter[1][2],$filter[1][3]);
+                                $query->join($filter[1][0],function ($join) use($filter){
+                                    $join->on($filter[1][1],$filter[1][2],$filter[1][3]);
                                     foreach ($filter[2] as $item){
                                         $join->where($item[0],$item[1],$item[2]);
                                     }
