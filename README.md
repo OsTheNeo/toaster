@@ -1,12 +1,12 @@
-# store
-##Intalacion Toster
+# TOSTER
+## Intalacion Toster
 
-###Requicitos minimos
+### Requicitos minimos
 
 - illuminate/support: 5.6.*|5.7.*
 - php: ^7.0
 
-####Ejecutar comando
+#### Ejecutar comando
  `composer require ostheneo/toaster`
  
 #### o agrega a tu composer.json lo siguiente
@@ -37,7 +37,7 @@ Tambien puedes publicar cada uno usando el comando que se espesifico anteriormen
 Para el manejo de usuarios y permisos, deves implementar la libreria _Zizaco/entrust_
 
 
-#####Crear migraciones
+##### Crear migraciones
 
 - Ejecuta el siguuiente comando para crear la migracion de la tabla **“galery”**
 
@@ -45,21 +45,18 @@ Para el manejo de usuarios y permisos, deves implementar la libreria _Zizaco/ent
 
 - dentro de la funcion _“up”_, en la migracion creada, pega el siguiente codigo.
    
-    `Schema::create('gallery', function (Blueprint $table) { 
+    `Schema::create('gallery', function (Blueprint $table) { $table->increments('id');
            
-        $table->increments('id');
-        $table->text('icon');
-        $table->text('images');
-        $table->integer('state');
-        $table->string('binded');
-        $table->string('videos',100);
-        $table->timestamps();
-        
-    });`
+           $table->text('icon');
+           $table->text('images');
+           $table->integer('state');
+           $table->string('binded');
+           $table->string('videos',100);
+           $table->timestamps(); });`
     
  Luego ejecuta php artisan migrate. Con esto se creara la tabla “gallery” en la base de datos.
  
- #####Crea la clase “Dictionary” con la siguiente estructura y los siguientes metodos.
+ ##### Crea la clase “Dictionary” con la siguiente estructura y los siguientes metodos.
  
  `public static function alias($ask) {
  
@@ -133,7 +130,7 @@ Para el manejo de usuarios y permisos, deves implementar la libreria _Zizaco/ent
           return $data->$key;
       }`
       
-  ###Implementacion o modo de uso
+  ### Implementacion o modo de uso
   
  Extiende del controlador “ToasterController”
   
