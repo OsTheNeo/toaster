@@ -27,7 +27,6 @@ y ejecuta **composer update**
    
             `php artisan vendor:publish --tag=config`
 
-- crear publicacion de rutas para el toster - para ser personalizadas
 
 Tambien puedes publicar cada uno usando el comando que se espesifico anteriormente, debajo de estos.
 
