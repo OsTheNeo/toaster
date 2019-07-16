@@ -152,6 +152,16 @@ class BladeEngine {
             $initField = $field;
             $field = $field->field;
         }
+        /**se cargan las opciones*/
+        $options=[];
+        if(isset($model->fields[$field]['options']))
+            $options=$model->fields[$field]['options'];
+        /**se determina si hay una previsualizacion*/
+        $preview=null;
+        if(isset($options['_preview'])){
+            $preview=$options['_preview'];
+            unset($options['_preview']);
+        }
 
         if($kindInput=='h2'){
             $construct->label = null;
@@ -229,6 +239,14 @@ class BladeEngine {
             case 'radio':
                 break;
             case 'file':
+                if($preview and $model->$field){
+                    $construct->preview=$preview['path'];
+                    if(isset($preview['pathDynamic'])){
+                        $pathDynamic=$preview['pathDynamic'];
+                        $construct->preview.='/'.$model->$pathDynamic;
+                    }
+                    $construct->preview.='/'.$model->$field;
+                }
                 $construct->field = Form::file($field,array_merge(['class' => 'uk-input'],$options));
                 return $construct;
             case 'custom':

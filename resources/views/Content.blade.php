@@ -169,11 +169,21 @@
                                     <div class="uk-margin">
                                         {!! $value->label !!}
                                         @if($value->field != null)
+                                            @if(isset($value->preview))
+                                                <div data-src="" uk-img>
+                                                    <div class="uk-form-controls">
+                                                        @php $pathFile=asset($value->preview) @endphp
+                                                        <img src="{{$pathFile}}" data-src="{{$pathFile}}" width="25%" alt="{{$pathFile}}" uk-img>
+                                                    </div>
+                                                </div>
+                                            @endif
                                             <div class="uk-form-controls">
                                                 {!! $value->field !!}
                                             </div>
 
                                         @else
+                                            <hr/>
+                                            <h2>{!! $value->include !!}</h2>
                                         @endif
                                     </div>
                                 @endforeach
