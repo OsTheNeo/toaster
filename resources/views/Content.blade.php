@@ -170,7 +170,7 @@
                                         {!! $value->label !!}
                                         @if($value->field != null)
                                             @if(isset($value->preview))
-                                                <div data-src="" uk-img>
+                                                <div class="uk-margin" uk-img>
                                                     <div class="uk-form-controls">
                                                         @php $pathFile=asset($value->preview) @endphp
                                                         <img src="{{$pathFile}}" data-src="{{$pathFile}}" width="25%" alt="{{$pathFile}}" uk-img>
