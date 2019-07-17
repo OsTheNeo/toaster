@@ -382,7 +382,7 @@ class ToasterController extends Controller {
         }
 
         $path = $this->path($gallery->created_at);
-        $filename = $image->getClientOriginalName();
+        $filename = time() . '-' .$input['binded']. '-' .$image->getClientOriginalName();
         if ($image->move(('public/files/' . $path), $filename)) {
             $array = json_decode($gallery->images, true);
             $array[] = $filename;
@@ -396,15 +396,16 @@ class ToasterController extends Controller {
 
     public function gallerySort(Request $request) {
         $input = $request->all();
-        $currentGallery = Gallery::where('binded', $input['binded'])->first();
-        $images = [];
-
-        foreach (json_decode($input['_list'], true) as $item) {
-            $images[$item['index']] = $item['name'];
+        $gallery = Gallery::where('binded', $input['binded'])->first();
+        $images = json_decode($gallery->images, true);
+        $imagesAux = [];
+        foreach (json_decode($input['_list'], true) as $item) {/**mantener nombre de la bd*/
+            if(!isset($item['indexOrigin'])) return [];
+            $imagesAux[$item['index']] = $images[$item['indexOrigin']];
         }
-
-        $currentGallery->images = json_encode($images, true);
-        $currentGallery->save();
+        $gallery->images = json_encode($imagesAux, true);
+        $gallery->save();
+        return response()->json($imagesAux, 200);
     }
 
 
@@ -413,30 +414,41 @@ class ToasterController extends Controller {
         $images = json_decode($currentGallery->images, true);
         $path = $this->path($currentGallery->created_at);
         $files = [];
-        foreach ($images as $image) {
-            $files[] = ['name' => $image,
-                        'size' => 1024,
-                        'type' => 'image/jpeg',
-                        'file' => url('public/files') . '/' . $path . '/' . $image,
-                        'data' => [
-                            'url' => url('public/files') . '/' . $path . '/' . $image]
+        foreach ($images as $key=>$image) {
+            $files[] = [
+                'name' => $image,
+                'size' => 1024,
+                'type' => 'image/jpeg',
+                'file' => url('public/files') . '/' . $path . '/' . $image,
+                'data' => [
+                    'url' => url('public/files') . '/' . $path . '/' . $image,
+                    'indexOrigin'=>$key
+                ]
             ];
         }
-
         return json_encode($files);
     }
 
     public function galleryRemove(Request $request) {
-        $input = $request->all();
-        $gallery = Gallery::where('binded', $input['binded'])->first();
-        $images = json_decode($gallery->images, true);
-        $position = array_search($input['file'], $images);
-        unset($images[$position]);
-        $gallery->images = json_encode($images, true);
-        $gallery->save();
+        $input=$request->all();
+        $images=[];
+        if($gallery = Gallery::where('binded', $input['binded'])->first()){
+            $images = json_decode($gallery->images, true);
+            foreach ($images as $key => $value) {
+                if ($value == $input['file']) {
+                    unset($images[$key]);
+                    break;
+                }
+            }
+            $gallery->images = json_encode($images, true);
+            if(count($images)<=0) $gallery->images = json_encode([], true);
+            $gallery->save();
 
-        $path = $this->path($gallery->created_at);
-        unlink('public/files/' . $path . '/' . $input['file']);
+            /**se elimina la imagen*/
+            $file='public/files/' . $this->path($gallery->created_at) . '/' . $input['file'];
+            if(file_exists($file)) unlink($file);
+        }
+        return $images;
     }
 
 
