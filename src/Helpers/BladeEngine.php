@@ -219,7 +219,7 @@ class BladeEngine {
                 if (isset($parameters->group)) {
                     $data = Dictionary::groupDefinitions($parameters->group);
                 } else {
-                    $data = self::makeOptions($model->fields[$field]['data']);
+                    $data = self::makeOptions((array)$parameters);
                 }
 
                 $construct->field = Form::select($field, $data, null, array_merge(['class' => 'uk-select'],$options));
