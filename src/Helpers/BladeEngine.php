@@ -203,6 +203,11 @@ class BladeEngine {
             case 'radio':
                 break;
             case 'file':
+                $construct->field = Form::file($field,['class' => 'uk-input']);
+                return $construct;
+            case 'color':
+                $construct->field = Form::color($field, null,['class' => 'uk-form-width-medium']);
+                return $construct;
                 break;
             case 'custom':
                 $construct->label = null;
