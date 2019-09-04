@@ -249,6 +249,10 @@ class BladeEngine {
                 }
                 $construct->field = Form::file($field,array_merge(['class' => 'uk-input'],$options));
                 return $construct;
+            case 'color':
+                $construct->field = Form::color($field, null, array_merge(['class' => 'uk-form-width-medium'],$options));
+                return $construct;
+                break;
             case 'custom':
                 $construct->label = null;
                 $construct->field = null;
