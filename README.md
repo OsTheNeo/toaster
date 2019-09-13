@@ -3,7 +3,7 @@
 
 ### Requicitos minimos
 
-- illuminate/support: 5.6.*|5.7.*
+- illuminate/support: 5.6.*|5.7.*|6.*
 - php: ^7.0
 
 #### Ejecutar comando
