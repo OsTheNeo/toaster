@@ -175,7 +175,7 @@ class BladeEngine {
         switch ($kindInput) {
 
             case 'text':
-                $construct->field = Form::text($field, null, array_merge(['class' => 'uk-textarea' , 'rows'=>3],$options));
+                $construct->field = Form::text($field, null, array_merge(['class' => 'uk-input' , 'rows'=>3],$options));
                 return $construct;
                 break;
 
