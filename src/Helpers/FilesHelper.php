@@ -76,8 +76,8 @@ class FilesHelper
                 $height=$resize['height'];
                 $ext=$resize['ext'];
             }else{
-                $width=config('laperla.fileUpload')['widthMax'];
-                $height=config('laperla.fileUpload')['heightMax'];
+                $width=config('toaster.fileUpload.widthMax');
+                $height=config('toaster.fileUpload.heightMax');
             }
             $file=self::resizeImage($file,$width,$height);
         }
@@ -97,9 +97,9 @@ class FilesHelper
     public static function save($file,$fName,$ext,$dir,$stricName=false){
         /**se establece el nombre para el archivo, si no se indica que se use el nombre estricto se genera con el formato predeterminado */
         if($stricName) $name=self::clean($fName).'.'.$ext;
-        else $name=self::formatName(config('laperla.fileUpload')['prefixName'].$fName).'.'.$ext;
+        else $name=self::formatName(config('toaster.fileUpload.prefixName').$fName).'.'.$ext;
         /**se establece la ruta de guardado*/
-        $path=public_path().'/'.config('laperla.fileUpload')['prefixUrl'].$dir.'/';
+        $path=public_path().'/'.config('toaster.fileUpload.prefixUrl').$dir.'/';
         /**se cuimprueba si existe el directorio de lo contrario se crea */
         if (!file_exists($path)) mkdir($path, 0777, true);
         /**determina el metodo que se usara para el guardado del archivo*/
@@ -133,8 +133,8 @@ class FilesHelper
     {
         if($request->file($fileName)){
             $file=$request->file($fileName);
-            $name=self::formatName(config('laperla.fileUpload')['prefixName'].$fName);
-            $path=public_path().'/'.config('laperla.fileUpload')['prefixUrl'].$dir.'/';
+            $name=self::formatName(config('toaster.fileUpload.prefixName').$fName);
+            $path=public_path().'/'.config('toaster.fileUpload.prefixUrl').$dir.'/';
             Storage::put($path,gzuncompress($name));
             return $name;
         }else{
@@ -169,8 +169,8 @@ class FilesHelper
                         $height=$resize['height'];
                         $ext=$resize['ext'];
                     }else{
-                        $width=config('laperla.fileUpload')['widthMax'];
-                        $height=config('laperla.fileUpload')['heightMax'];
+                        $width=config('toaster.fileUpload.widthMax');
+                        $height=config('toaster.fileUpload.heightMax');
                     }
                     $file=self::resizeImage($file,$width,$height);
                 }
@@ -269,6 +269,6 @@ class FilesHelper
      */
     public static function destroy($dirAndName)
     {
-       if(file_exists(public_path().'/'.config('laperla.fileUpload')['prefixUrl'].$dirAndName)) unlink(public_path().'/'.config('laperla.fileUpload')['prefixUrl'].$dirAndName);
+       if(file_exists(public_path().'/'.config('toaster.fileUpload.prefixUrl').$dirAndName)) unlink(public_path().'/'.config('toaster.fileUpload.prefixUrl').$dirAndName);
     }
 }
