@@ -78,6 +78,7 @@ class ToasterController extends Controller {
 
         $query->select($columns);
         if(isset($data['filter'])){
+            if(!is_array($request['filter'])) $request['filter']=json_decode($request['filter'],true);
             foreach ($data['filter'] as $key=>$filter){
                 if(isset($filter['filter'])) $key=$filter['filter'];
                 if(!is_array($filter)){
