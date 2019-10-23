@@ -79,6 +79,7 @@ class ToasterController extends Controller {
         $query->select($columns);
         if(isset($data['filter'])){
             foreach ($data['filter'] as $key=>$filter){
+                if(isset($filter['filter'])) $key=$filter['filter'];
                 if(!is_array($filter)){
                     switch ($key){
                         case 'isNull':
