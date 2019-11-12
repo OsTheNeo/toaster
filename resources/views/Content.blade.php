@@ -306,6 +306,12 @@
                         </script>
                     @endif
                 @endif
+                @if (isset($content->ckeditor))
+                    <script src="https://cdn.ckeditor.com/4.13.0/standard/ckeditor.js"></script>
+                    <script>
+                        CKEDITOR.replace( 'ckeditor' );
+                    </script>
+                @endif
 
             @foreach(\OsTheNeo\Toaster\BladeEngine::JsIncludes($contents) as $js)
                 <link rel="stylesheet" href="{{$js}}">
