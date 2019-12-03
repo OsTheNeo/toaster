@@ -8,7 +8,7 @@
 
 namespace OsTheNeo\Toaster;
 
-
+use Illuminate\Support\Facades\Auth;
 use App\Dictionary;
 use Illuminate\Support\Facades\DB;
 use Collective\Html\FormFacade as Form;
@@ -432,10 +432,17 @@ class BladeEngine {
                         array_push($parameters, $row->$parameter);
                     }
                 }
-                if(isset($link[3]) and ($link[3]=='delete' or $link[3]=='destroy')){
-                    $links.=Form::open(['route'=>[$link[1],$parameters[0]],'method' => 'delete'])
+                if(isset($link[3])) {
+                    if (($link[3]=='delete' or $link[3]=='destroy')) {
+                        $links.=Form::open(['route'=>[$link[1],$parameters[0]],'method' => 'delete'])
                         ."<input type='submit' value='$link[0]' class='uk-button uk-button-default uk-button-small' onclick='return confirm(\"¿Desea eliminar el registro?\")'/>"
                         .Form::close();
+                    }
+                    else {
+                        if (Auth::user()->can($link[3])) {
+                            $links .= "<a class='uk-button uk-button-default uk-button-small' href='" . route($link[1], $parameters) . "'>" . $link[0] . "</a>";
+                        }
+                    }
                 }else{
                     $links .= "<a class='uk-button uk-button-default uk-button-small' href='" . route($link[1], $parameters) . "'>" . $link[0] . "</a>";
                 }
