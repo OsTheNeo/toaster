@@ -411,7 +411,9 @@ class BladeEngine {
                     $html[$position] = '';
                 }
 
-
+                if (isset($parameters->permission) and ! Auth::user()->can($parameters->permission)) {
+                    $button = '';
+                }
                 $html[$position] .= $button;
             }
         }
