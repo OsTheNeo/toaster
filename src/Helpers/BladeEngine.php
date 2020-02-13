@@ -227,7 +227,12 @@ class BladeEngine {
                 break;
 
             case 'checkbox':
-                $construct->field = self::makeCheckbox($field, $parameters->group, $model);
+                $data = null;
+                if (isset($parameters->group)) {
+                    $data = Dictionary::groupDefinitions($parameters->group);  
+                } 
+                $construct->field = self::makeCheckbox($field, $parameters->group, $model, $data);
+                
                 return $construct;
                 break;
 
@@ -329,13 +334,17 @@ class BladeEngine {
      * @param string $construct
      * @return string
      */
-    public static function makeCheckbox($field, $group, $model) {
+    public static function makeCheckbox($field, $group, $model, $dictionary = null) {
         $data = [];
         if ($model->$field != null) {
             $data = explode(',', $model->$field);
         }
-        $checks = "";
         $options = self::makeOptions($group);
+        $checks = "";
+        if ($dictionary != null) {
+            $options = $dictionary;
+        }
+        
         foreach ($options as $key => $item) {
             $checks .= '<div class="uk-form-controls-text"><label>'
                 . Form::checkbox($field . '[]', $key, in_array($key, $data), ['id' => $field . $key, 'class' => 'uk-checkbox uk-margin-small-right'])
