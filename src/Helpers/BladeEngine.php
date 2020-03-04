@@ -265,7 +265,7 @@ class BladeEngine {
                 return $construct;
                 break;
             case 'ckeditor':
-                $construct->field = Form::textarea('ckeditor', null, array_merge(['rows' => '3', 'class' => 'uk-textarea'],$options));
+                $construct->field = Form::textarea('ckeditor', null, array_merge(['rows' => '3', 'class' => 'ckeditor', 'id' => 'ckeditor'],$options));
                 return $construct;
                 break;
         }
