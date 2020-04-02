@@ -32,6 +32,27 @@ return [
     | En esta variable se especifica la seccion de contenido donde se incluira el contenido de  la vista de Content
     |
     */
-    'content'=>'content'
+    'content'=>'content',
+    /**
+     * configuraciones globales para los archivos subidos en el sistema
+     */
+    'fileUpload'=>[
+        /**
+         * prefijo para el nombre de los archivos subidos
+         */
+        'prefixName'=>'toaster-',
+        /**
+         * ruta predefinida donde se subiran todos los archivos
+         */
+        'prefixUrl'=>'public/files/',
+        /**
+         * ancho maximo para la imagen
+         */
+        'widthMax'=>800,
+        /**
+         * haltura maxima para la imagen
+         */
+        'heightMax'=>800,
+    ],
 
 ];
