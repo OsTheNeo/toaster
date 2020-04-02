@@ -8,8 +8,10 @@
 	 * Class Store
 	 * @package App\Models\Store
 	 * @version March 10, 2017, 4:28 pm UTC
+     *
+     * @deprecated
 	 */
-    class Gallery extends Model {
+    class GalleriesOld extends Model {
         protected $table = 'gallery';
 
         use SoftDeletes;

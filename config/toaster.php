@@ -46,13 +46,25 @@ return [
          */
         'prefixUrl'=>'public/files/',
         /**
+         * ruta predefinida donde se subiran los Thumbnail
+         */
+        'prefixUrlThumbnail'=>'thumbnail/',
+        /**
          * ancho maximo para la imagen
          */
-        'widthMax'=>800,
+        'widthMax'=>1080,
+        /**
+         * ancho maximo para el Thumbnail
+         */
+        'widthMaxThumbnail'=>350,
         /**
          * haltura maxima para la imagen
          */
-        'heightMax'=>800,
+        'heightMax'=>null,
+        /**
+         * haltura maxima para el Thumbnail
+         */
+        'heightMaxThumbnail'=>null,
     ],
 
 ];

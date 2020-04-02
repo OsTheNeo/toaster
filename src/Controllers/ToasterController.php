@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use OsTheNeo\Toaster\BladeEngine;
-use OsTheNeo\Toaster\Models\Gallery;
+use OsTheNeo\Toaster\Models\Galleries;
 
 class ToasterController extends Controller {
 
@@ -287,9 +287,9 @@ class ToasterController extends Controller {
     public function getJsonIcon($id, $variant) {
 
         $bin = [$variant => $id];
-        $gallery = Gallery::where('binded', json_encode($bin))->first();
+        $gallery = Galleries::where('binded', json_encode($bin))->first();
         if ($gallery == null) {
-            $gallery = new Gallery();
+            $gallery = new Galleries();
             $gallery->binded = json_encode($bin);
             $gallery->images = json_encode([], true);
             $gallery->save();
@@ -305,7 +305,7 @@ class ToasterController extends Controller {
 
     public function getJsonImages($id, $variant) {
         $bin = [$variant => $id];
-        $gallery = Gallery::where('binded', json_encode($bin))->first();
+        $gallery = Galleries::where('binded', json_encode($bin))->first();
         $path = $this->path($gallery->created_at);
         $images = json_decode($gallery->images);
         $temp = [];
@@ -323,7 +323,7 @@ class ToasterController extends Controller {
     public function saveImages(Request $request) {
         $input = $request->all();
         $bin = [$input['route'] => $input['model']];
-        $gallery = Gallery::where('binded', json_encode($bin))->first();
+        $gallery = Galleries::where('binded', json_encode($bin))->first();
         $path = $this->path($gallery->created_at);
         $image = $request->file('image');
         $filename = time() . '-' . $image->getClientOriginalName() . '.' . $image->getClientOriginalExtension();
@@ -337,7 +337,7 @@ class ToasterController extends Controller {
     public function deleteIcon(Request $request) {
         $input = $request->all();
         $bin = [$input['route'] => $input['model']];
-        $gallery = Gallery::where('binded', json_encode($bin))->first();
+        $gallery = Galleries::where('binded', json_encode($bin))->first();
         $path = $this->path($gallery->created_at);
         $image = $request->file('image');
         $filename = time() . '-' . $image->getClientOriginalName() . '.' . $image->getClientOriginalExtension();
@@ -349,7 +349,7 @@ class ToasterController extends Controller {
     public function deleteImages(Request $request) {
         $input = $request->all();
         $bin = [$input['route'] => $input['model']];
-        $gallery = Gallery::where('binded', json_encode($bin))->first();
+        $gallery = Galleries::where('binded', json_encode($bin))->first();
         $images = json_decode($gallery->images, true);
         $img = (explode('/', $input['img']));
         $img = end($img);
@@ -374,10 +374,10 @@ class ToasterController extends Controller {
         $image = $request->file('files');
         $image = $image[0];
 
-        $gallery = Gallery::where('binded', $input['binded'])->first();
+        $gallery = Galleries::where('binded', $input['binded'])->first();
 
         if ($gallery == null) {
-            $gallery = new Gallery();
+            $gallery = new Galleries();
             $gallery->images = json_encode([], true);
             $gallery->binded = $input['binded'];
             $gallery->save();
@@ -398,7 +398,7 @@ class ToasterController extends Controller {
 
     public function gallerySort(Request $request) {
         $input = $request->all();
-        $gallery = Gallery::where('binded', $input['binded'])->first();
+        $gallery = Galleries::where('binded', $input['binded'])->first();
         $images = json_decode($gallery->images, true);
         $imagesAux = [];
         foreach (json_decode($input['_list'], true) as $item) {/**mantener nombre de la bd*/
@@ -412,7 +412,7 @@ class ToasterController extends Controller {
 
 
     public function galleryRequest($binded) {
-        $currentGallery = Gallery::where('binded', $binded)->first();
+        $currentGallery = Galleries::where('binded', $binded)->first();
         $images = json_decode($currentGallery->images, true);
         $path = $this->path($currentGallery->created_at);
         $files = [];
@@ -434,7 +434,7 @@ class ToasterController extends Controller {
     public function galleryRemove(Request $request) {
         $input=$request->all();
         $images=[];
-        if($gallery = Gallery::where('binded', $input['binded'])->first()){
+        if($gallery = Galleries::where('binded', $input['binded'])->first()){
             $images = json_decode($gallery->images, true);
             foreach ($images as $key => $value) {
                 if ($value == $input['file']) {

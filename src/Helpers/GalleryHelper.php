@@ -3,9 +3,8 @@
 
 namespace OsTheNeo\Toaster;
 
-
-use App\Models\Data\Galleries;
 use Illuminate\Http\Request;
+use OsTheNeo\Toaster\Models\Galleries;
 
 /**
  * Class GalleryHelper
@@ -17,7 +16,7 @@ class GalleryHelper
     protected static $imageDefault='public\img\set\empty.jpg';
     /**
      * Carga la carpeta base de la galeria
-    */
+     */
     public static function loadFile($created_at){
         $created = explode(" ", $created_at);
         $created = explode('-', $created[0]);
@@ -29,7 +28,7 @@ class GalleryHelper
      * @return string
      */
     public static function path($created_at) {
-        return config('laperla.fileUpload.prefixUrl').self::loadFile($created_at);
+        return config('toaster.fileUpload.prefixUrl').self::loadFile($created_at);
     }
 
     /**
@@ -152,7 +151,7 @@ class GalleryHelper
      */
     public static function loadOrCreatedThumbnail(string $image, string $folder, string $path){
         if(!file_exists("$path/$image")) return asset(self::$imageDefault);
-        $thumbnail=config('laperla.fileUpload.prefixUrl').config('laperla.fileUpload.prefixUrlThumbnail')."$folder/$image";
+        $thumbnail=config('toaster.fileUpload.prefixUrl').config('toaster.fileUpload.prefixUrlThumbnail')."$folder/$image";
         ini_set('memory_limit', '-1');
         if(!file_exists($thumbnail)) self::generateThumbnail($image,$folder,$path);
         if(!file_exists($thumbnail)) return asset("$path/$image");
@@ -170,12 +169,12 @@ class GalleryHelper
     public static function generateThumbnail($fileName, $folder,$path){
         $name=explode('.',$fileName);
         return FilesHelper::generateThumbnail("$path/$fileName",[
-            'width'=>config('laperla.fileUpload.widthMaxThumbnail'),
-            'height'=>config('laperla.fileUpload.heightMaxThumbnail'),
+            'width'=>config('toaster.fileUpload.widthMaxThumbnail'),
+            'height'=>config('toaster.fileUpload.heightMaxThumbnail'),
             'stricName'=>true,
             'name'=>$name[0],
             'ext'=>last($name),
-            'dir'=>config('laperla.fileUpload.prefixUrlThumbnail').$folder
+            'dir'=>config('toaster.fileUpload.prefixUrlThumbnail').$folder
         ]);
     }
 
@@ -204,7 +203,7 @@ class GalleryHelper
             $image=self::loadFile($gallery->created_at).'/'.$input['file'];
             FilesHelper::destroy($image);
             /**se elimina la galeria*/
-            $thumbnail=config('laperla.fileUpload.prefixUrlThumbnail').$image;
+            $thumbnail=config('toaster.fileUpload.prefixUrlThumbnail').$image;
             FilesHelper::destroy($thumbnail);
         }
         return $images;
@@ -226,7 +225,7 @@ class GalleryHelper
                 $image=self::loadFile($gallery->created_at).'/'.$value;
                 FilesHelper::destroy($image);
                 /**se elimina la galeria*/
-                $thumbnail=config('laperla.fileUpload.prefixUrlThumbnail').$image;
+                $thumbnail=config('toaster.fileUpload.prefixUrlThumbnail').$image;
                 FilesHelper::destroy($thumbnail);
             }
         $gallery->delete();
