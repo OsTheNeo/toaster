@@ -211,7 +211,7 @@ class BladeEngine {
                 break;
 
             case 'date':
-                $construct->field = Form::text($field, null, array_merge(['class' => "$class uk-input"],$options));
+                $construct->field = Form::date($field, null, array_merge(['class' => "$class uk-input"],$options));
                 return $construct;
                 break;
 
